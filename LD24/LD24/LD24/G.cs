@@ -60,7 +60,7 @@ namespace LD24
 
         protected override void UnloadContent()
         {
-            
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -79,6 +79,28 @@ namespace LD24
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             currentScreen.Draw();
+
+            if (RM.IsDown(InputAction.AltFire) && RM.IsPressed(InputAction.Fire))
+            {
+                int scale = 2;
+                RenderTarget2D screenshot = new RenderTarget2D(GraphicsDevice, 800 * scale, 600 * scale, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+                GraphicsDevice.Clear(Color.Black);
+                GraphicsDevice.SetRenderTarget(screenshot);
+                GraphicsDevice.Clear(Color.CornflowerBlue);
+                currentScreen.Draw();
+                GraphicsDevice.SetRenderTarget(null);
+
+                using (System.IO.FileStream fs = new System.IO.FileStream(@"screenshot.png", System.IO.FileMode.OpenOrCreate))
+                {
+
+                    Color[] data = new Color[320*240*scale*scale];
+                    screenshot.GetData<Color>(0, new Rectangle(240*scale, 180*scale, 320*scale, 240*scale), data, 0, data.Length);
+                    Texture2D herp = new Texture2D(GraphicsDevice, 320*scale, 240*scale);
+                    herp.SetData<Color>(data);
+                    herp.SaveAsPng(fs, 320*scale, 240*scale); // save render target to disk
+                }
+                screenshot.Dispose();
+            }
 
             base.Draw(gameTime);
         }
