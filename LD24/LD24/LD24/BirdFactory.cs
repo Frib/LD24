@@ -15,6 +15,7 @@ namespace LD24
         Texture2D sTail;
         Texture2D sTorso;
         List<Texture2D> beaks = new List<Texture2D>();
+        private Texture2D sWing;
         
         internal void LoadContent(ContentManager Content)
         {
@@ -22,6 +23,7 @@ namespace LD24
             sLeg = Content.Load<Texture2D>("Bird/Side/Leg");
             sTail = Content.Load<Texture2D>("Bird/Side/Tail");
             sTorso = Content.Load<Texture2D>("Bird/Side/Torso");
+            sWing = Content.Load<Texture2D>("Bird/Side/Wing");
             for (int i = 1; i < 6; i++)
                 beaks.Add(Content.Load<Texture2D>("Bird/Side/Beak" + i));
         }
@@ -29,10 +31,10 @@ namespace LD24
         public Bird CreateBird(Island i, Vector3 pos)
         {
             Bird b = new Bird(i, pos);
-            b.SetTexturesSide(sHead, sTorso, sTail, sLeg, beaks.First());
+            b.SetTexturesSide(sHead, sTorso, sTail, sLeg, beaks.Random(), sWing);
             Color baseColor = GenColor(Color.White);
-            b.SetColors(GenColor(baseColor), GenColor(baseColor), baseColor);
-            b.Finalize();
+            b.SetColors(GenColor(baseColor), GenColor(baseColor), baseColor, GenColor(baseColor));
+            b.FinalizeBird();
             return b;
         }
 
@@ -40,7 +42,7 @@ namespace LD24
         {
             var r = G.r;
             if (r.Next(2) == 1) return color;
-            int i = r.Next(20);
+            int i = r.Next(30);
             switch (i)
             {
                 case 0: 

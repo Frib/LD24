@@ -21,7 +21,7 @@ namespace LD24
 
         public Vector3 Center { get { return new Vector3(position.X, position.Y + (size.Y / 2), position.Z); } }
 
-        private Vector3 size;
+        protected Vector3 size;
 
         public Entity(Island i, Vector2 size, Vector3 pos)
         {
