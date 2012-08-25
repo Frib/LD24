@@ -91,7 +91,7 @@ namespace LD24
                 treeCollision.Insert(tree);
             }
 
-            entities.Add(new Player(this, new Vector2(2, 4), new Vector3(64, 0, 64)));
+            entities.Add(new Player(this, new Vector2(2, 4), new Vector3(512, 0, 512)));
         }
 
         private void CreateWater()
@@ -247,6 +247,11 @@ namespace LD24
             {
                 e.Draw();
             }
+        }
+
+        public List<Tree> WorldCollision(RectangleF r)
+        {
+            return treeCollision.Query(r).ToList();
         }
 
         public float CheckHeightCollision(Vector3 location)

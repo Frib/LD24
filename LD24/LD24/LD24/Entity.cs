@@ -50,6 +50,21 @@ namespace LD24
         {
             var expectedPos = Position + velocity;
 
+            if (island.WorldCollision(GetRectF(expectedPos)).Any())
+            {
+                var posX = Position + new Vector3(velocity.X, 0, 0);
+                var posZ = Position + new Vector3(0, 0, velocity.Z);
+                if (island.WorldCollision(GetRectF(posX)).Any())
+                {
+                    velocity.X = 0;
+                }
+                if (island.WorldCollision(GetRectF(posZ)).Any())
+                {
+                    velocity.Z = 0;
+                }
+
+            }
+
             position += velocity;
             position.Y = island.CheckHeightCollision(position);
         }
@@ -81,6 +96,12 @@ namespace LD24
         public virtual Vector3 getLookAt()
         {
             return Vector3.Forward;
+        }
+
+
+        protected RectangleF GetRectF(Vector3 pos)
+        {
+            return new RectangleF(new Vector2(pos.X - (size.X / 2), pos.Z - (size.Z / 2)), new Vector2(pos.X + (size.X / 2), pos.Z + (size.Z / 2)));
         }
     }
 }

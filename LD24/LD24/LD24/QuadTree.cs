@@ -313,9 +313,10 @@ namespace LD24
             return topLeft.X < queryArea.topLeft.X && topLeft.Y < queryArea.topLeft.Y && bottomRight.X > queryArea.bottomRight.X && bottomRight.Y > queryArea.bottomRight.Y;
         }
 
-        internal bool IntersectsWith(RectangleF rectangleF)
+        internal bool IntersectsWith(RectangleF queryArea)
         {
-            return (topLeft.X < rectangleF.bottomRight.X || topLeft.Y < rectangleF.bottomRight.Y) && (bottomRight.X > rectangleF.topLeft.X || bottomRight.Y > rectangleF.topLeft.X);
+            return !(topLeft.X < queryArea.topLeft.X || topLeft.Y < queryArea.topLeft.Y || bottomRight.X > queryArea.bottomRight.X || bottomRight.Y > queryArea.bottomRight.Y);
+        
         }
     }
 }
