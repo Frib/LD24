@@ -11,8 +11,8 @@ namespace LD24
     {
         QuadTree<Tree> treeCollision;
 
-        float scaleHorizontal = 4;
-        float scaleVertical = 2;
+        public float scaleHorizontal = 4;
+        public float scaleVertical = 2;
 
         int treeminy = 40;
         int treemaxy = 150;
@@ -25,6 +25,7 @@ namespace LD24
         private VertexBuffer water;
 
         private List<Entity> entities = new List<Entity>();
+        public float waterheight;
 
         public Island()
         {
@@ -84,20 +85,25 @@ namespace LD24
                     z = G.r.Next((int)(512 * scaleHorizontal));
                     height = CheckHeightCollision(new Vector3(x, 0, z));
                 }
-                var tree=  new Tree(this, new Vector3(x, height - 8, z));
+                var tree = new Tree(this, new Vector3(x, height - 8, z));
                 entities.Add(tree);
                 treeCollision.Insert(tree);
             }
 
             entities.Add(new Player(this, new Vector2(3, 8), new Vector3(512, 0, 512)));
-            for (int i = 0; i < 100; i++ )
-                entities.Add(G.g.bf.CreateBird(this, new Vector3(540 + i*10, 0, 540)));
+            for (int i = 0; i < 100; i++)
+            {
+                var x = G.r.Next((int)(512 * scaleHorizontal));
+                var z = G.r.Next((int)(512 * scaleHorizontal));
+                entities.Add(G.g.bf.CreateBird(this, new Vector3(x, 32, z)));
+            
+            }
         }
 
         private void CreateWater()
         {
 
-            float waterheight = 9.5f;
+            waterheight = 9.5f;
             int size = 400;
             int iters = 150;
 

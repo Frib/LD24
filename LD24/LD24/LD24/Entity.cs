@@ -65,6 +65,7 @@ namespace LD24
             }
 
             position += velocity;
+            if (!flying)
             position.Y = island.CheckHeightCollision(position);
         }
 
@@ -85,6 +86,7 @@ namespace LD24
 
         protected VertexPositionNormalTexture[] billboardVertices;
         protected Island island;
+        protected bool flying;
         
         protected virtual Matrix GetMatrixChain()
         {

@@ -46,9 +46,9 @@ namespace LD24
                 if (RM.IsDown(InputAction.ZoomIn) || IM.ScrollDelta > 0)
                 {
                     cameraZoom--;
-                    if (cameraZoom < 50)
+                    if (cameraZoom < 10)
                     {
-                        cameraZoom = 50;
+                        cameraZoom = 10;
                     }
                 }
                 if (RM.IsDown(InputAction.ZoomOut) || IM.ScrollDelta < 0)
