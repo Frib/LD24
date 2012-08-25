@@ -12,7 +12,7 @@ namespace LD24
         private Camera camera;
         private Island island;
         
-        public GameScreen(G g) : base(g)
+        public GameScreen(G g)
         {
             camera = new Camera();
             island = new Island();
@@ -20,6 +20,11 @@ namespace LD24
 
         public override void Update()
         {
+            if (RM.IsPressed(InputAction.Back))
+            {
+                g.Showscreen(new PhotoAlbum(this));
+            }
+
             camera.Update();
             island.Update();
 
@@ -45,18 +50,17 @@ namespace LD24
                        
             
             spriteBatch.Begin();
-            if (RM.IsDown(InputAction.AltFire))
+            if (RM.IsDown(InputAction.AltFire) && !RM.IsPressed(InputAction.Fire))
             {
                 spriteBatch.Draw(RM.GetTexture("cameraoverlay"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             }
-            spriteBatch.DrawString(font, "test", Vector2.Zero, Color.White);
             spriteBatch.End();
         }
 
         public override void Show()
         {
             IM.SnapToCenter = true;
-            
+            g.IsMouseVisible = false;
             base.Show();
         }
     }

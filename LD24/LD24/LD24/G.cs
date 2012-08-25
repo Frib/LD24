@@ -23,6 +23,7 @@ namespace LD24
         public BasicEffect e;
         public SpriteFont font;
         Screen currentScreen;
+        internal List<Photograph> photos = new List<Photograph>();
 
         public G()
         {
@@ -66,8 +67,6 @@ namespace LD24
         protected override void Update(GameTime gameTime)
         {
             IM.NewState();
-            if (IM.IsKeyDown(Keys.Escape))
-                this.Exit();
 
             currentScreen.Update();
 
@@ -90,15 +89,12 @@ namespace LD24
                 currentScreen.Draw();
                 GraphicsDevice.SetRenderTarget(null);
 
-                using (System.IO.FileStream fs = new System.IO.FileStream(@"screenshot.png", System.IO.FileMode.OpenOrCreate))
-                {
-
-                    Color[] data = new Color[320*240*scale*scale];
-                    screenshot.GetData<Color>(0, new Rectangle(240*scale, 180*scale, 320*scale, 240*scale), data, 0, data.Length);
-                    Texture2D herp = new Texture2D(GraphicsDevice, 320*scale, 240*scale);
-                    herp.SetData<Color>(data);
-                    herp.SaveAsPng(fs, 320*scale, 240*scale); // save render target to disk
-                }
+                Color[] data = new Color[320 * 240 * scale * scale];
+                screenshot.GetData<Color>(0, new Rectangle(240 * scale, 180 * scale, 320 * scale, 240 * scale), data, 0, data.Length);
+                Texture2D shot = new Texture2D(GraphicsDevice, 320 * scale, 240 * scale);
+                shot.SetData<Color>(data);
+                Photograph pg = new Photograph(shot);
+                photos.Add(pg);
                 screenshot.Dispose();
             }
 
@@ -108,5 +104,12 @@ namespace LD24
         public static bool HasFocus { get { return g.IsActive; } }
         public static int Width { get { return g.Window.ClientBounds.Width; } }
         public static int Height { get { return g.Window.ClientBounds.Height; } }
+
+        internal void Showscreen(Screen newScreen)
+        {
+            currentScreen.Hide();
+            currentScreen = newScreen;
+            currentScreen.Show();
+        }
     }
 }

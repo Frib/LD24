@@ -12,9 +12,9 @@ namespace LD24
         protected Microsoft.Xna.Framework.Graphics.GraphicsDevice GraphicsDevice;
         protected Microsoft.Xna.Framework.Graphics.SpriteFont font;
 
-        public Screen(G g)
+        public Screen()
         {
-            this.g = g;
+            this.g = G.g;
             this.spriteBatch = g.spriteBatch;
             this.e = g.e;
             this.GraphicsDevice = g.GraphicsDevice;
