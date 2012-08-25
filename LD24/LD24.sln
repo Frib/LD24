@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LD24", "LD24\LD24\LD24.csproj", "{DDF48E54-3FFB-4C79-B208-B1A674807315}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "LD24Content", "LD24\LD24Content\LD24Content.contentproj", "{A3D72C94-A6F6-49DA-96DC-2D7618EDCB79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDF48E54-3FFB-4C79-B208-B1A674807315}.Debug|x86.ActiveCfg = Debug|x86
+		{DDF48E54-3FFB-4C79-B208-B1A674807315}.Debug|x86.Build.0 = Debug|x86
+		{DDF48E54-3FFB-4C79-B208-B1A674807315}.Release|x86.ActiveCfg = Release|x86
+		{DDF48E54-3FFB-4C79-B208-B1A674807315}.Release|x86.Build.0 = Release|x86
+		{A3D72C94-A6F6-49DA-96DC-2D7618EDCB79}.Debug|x86.ActiveCfg = Debug|x86
+		{A3D72C94-A6F6-49DA-96DC-2D7618EDCB79}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
