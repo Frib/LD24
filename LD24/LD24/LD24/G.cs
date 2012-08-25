@@ -45,6 +45,7 @@ namespace LD24
             font = Content.Load<SpriteFont>("font");
             RM.AddTexture("island", Content.Load<Texture2D>("terrain"));
             RM.AddTexture("grass", Content.Load<Texture2D>("grass"));
+            RM.AddTexture("water", Content.Load<Texture2D>("water"));
         }
 
         protected override void UnloadContent()

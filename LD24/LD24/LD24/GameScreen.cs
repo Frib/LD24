@@ -21,6 +21,7 @@ namespace LD24
         public override void Update()
         {
             camera.Update();
+            camera.position.Y = island.CheckHeightCollision(camera.position);
         }
 
         public override void Draw()

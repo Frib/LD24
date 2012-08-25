@@ -9,15 +9,19 @@ namespace LD24
 {
     class Island
     {
+        float scaleHorizontal = 4;
+        float scaleVertical = 2;
+
         private List<VertexBuffer> buffers = new List<VertexBuffer>();
 
         private VertexPositionNormalTexture[] pointList;
         private float[] heights;
+        private VertexBuffer water;
 
         public Island()
         {
             var tex = RM.GetTexture("island");
-            
+
             var width = tex.Width;
             var height = tex.Height;
 
@@ -33,7 +37,7 @@ namespace LD24
             }
 
             WritePointList();
-            SmoothTerrain(7);
+            SmoothTerrain(9);
 
             int previous = 0;
             int herp = 60000;
@@ -53,6 +57,36 @@ namespace LD24
             var vbe = new VertexBuffer(G.g.GraphicsDevice, typeof(VertexPositionNormalTexture), pointList.Length - previous, BufferUsage.WriteOnly);
             vbe.SetData<VertexPositionNormalTexture>(pointList.Skip(previous).Take(pointList.Length - previous).ToArray());
             buffers.Add(vbe);
+
+            CreateWater();
+        }
+
+        private void CreateWater()
+        {
+
+            float waterheight = 9.5f;
+            int size = 400;
+            int iters = 150;
+
+            VertexPositionNormalTexture[] waters = new VertexPositionNormalTexture[iters * iters * 6];
+            int offset = 0;
+            for (int x = 0; x < iters; x++)
+            {
+                for (int y = 0; y < iters; y++)
+                {
+                    int offX = size * (x - (iters / 2));
+                    int offY = size * (y - (iters / 2));
+                    waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX, waterheight, offY), Vector3.Up, new Vector2(0, 0));
+                    waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX + size, waterheight, offY), Vector3.Up, new Vector2(size, 0));
+                    waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX, waterheight, offY + size), Vector3.Up, new Vector2(0, size));
+                    waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX, waterheight, offY + size), Vector3.Up, new Vector2(0, size));
+                    waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX + size, waterheight, offY), Vector3.Up, new Vector2(size, 0));
+                    waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX + size, waterheight, offY + size), Vector3.Up, new Vector2(size, size));                    
+                }
+            }
+
+            water = new VertexBuffer(G.g.GraphicsDevice, typeof(VertexPositionNormalTexture), iters * iters * 6, BufferUsage.WriteOnly);
+            water.SetData<VertexPositionNormalTexture>(waters);
         }
 
         public void SmoothTerrain(int times)
@@ -84,16 +118,17 @@ namespace LD24
 
         public void WritePointList()
         {
-            pointList = new VertexPositionNormalTexture[513 * 513 * 6];
-            for (int x = 1; x < 513; x++)
+            pointList = new VertexPositionNormalTexture[512 * 512 * 6];
+            
+            for (int x = 1; x < 512; x++)
             {
-                for (int z = 1; z < 513; z++)
+                for (int z = 1; z < 512; z++)
                 {
                     Vector3 point1 = GetVectorForHeightMapThingyEnzo(x, z);
                     Vector3 point2 = GetVectorForHeightMapThingyEnzo(x + 1, z);
                     Vector3 point3 = GetVectorForHeightMapThingyEnzo(x, z + 1);
                     Vector3 point4 = GetVectorForHeightMapThingyEnzo(x + 1, z + 1);
-                    
+
                     float texScale = 1;
 
                     pointList[(6 * x) + ((6 * z) * 512)] = new VertexPositionNormalTexture(point1, GetNormal(x, z), new Vector2(x / texScale, z / texScale));
@@ -135,7 +170,7 @@ namespace LD24
                 newx -= 512;
             }
 
-            return new Vector3((x), heights[newx + (newz * 512)], (z));
+            return new Vector3((x * scaleHorizontal), heights[newx + (newz * 512)] * scaleVertical, (z * scaleHorizontal));
         }
 
         public void Draw()
@@ -143,21 +178,66 @@ namespace LD24
             G.g.e.VertexColorEnabled = false;
             G.g.e.TextureEnabled = true;
             G.g.e.Texture = RM.GetTexture("grass");
-            G.g.e.CurrentTechnique.Passes[0].Apply();
+
 
             G.g.e.LightingEnabled = true;
             G.g.e.DirectionalLight0.Enabled = true;
             G.g.e.DirectionalLight0.Direction = new Vector3(-1, -1, -1);
             G.g.e.DirectionalLight0.DiffuseColor = new Vector3(0.4f, 0.5f, 0.4f);
             G.g.e.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
-
+            G.g.e.CurrentTechnique.Passes[0].Apply();
             foreach (var vb in buffers)
             {
                 G.g.GraphicsDevice.SetVertexBuffer(vb);
                 G.g.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, vb.VertexCount / 3);
-
             }
 
+            G.g.e.Texture = RM.GetTexture("water");
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            G.g.GraphicsDevice.SetVertexBuffer(water);
+            G.g.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, water.VertexCount / 3);
+        }
+
+        public float CheckHeightCollision(Vector3 location)
+        {
+            try
+            {
+                int x = (int)(location.X / scaleHorizontal);
+                int z = (int)(location.Z / scaleHorizontal);
+                if (x >= 0 && x <= 512 && z >= 0 && z <= 512)
+                {
+                    float tl = pointList[(6 * x) + ((6 * z) * 512)].Position.Y;
+                    float tr = pointList[(6 * (x + 1)) + ((6 * z) * 512)].Position.Y;
+                    float bl = pointList[(6 * x) + ((6 * (z + 1)) * 512)].Position.Y;
+                    float br = pointList[(6 * (x + 1)) + ((6 * (z + 1)) * 512)].Position.Y;
+
+                    float fHeight;
+                    float fSqX = (location.X / scaleHorizontal) - x;
+                    float fSqZ = (location.Z / scaleHorizontal) - z;
+                    if ((fSqX + fSqZ) < 1)
+                    {
+                        fHeight = tl;
+                        fHeight += (tr - tl) * fSqX;
+                        fHeight += (bl - tl) * fSqZ;
+                    }
+                    else
+                    {
+                        fHeight = br;
+                        fHeight += (tr - br) * (1.0f - fSqZ);
+                        fHeight += (bl - br) * (1.0f - fSqX);
+                    }
+
+                    return fHeight+ 4;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }
