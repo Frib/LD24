@@ -97,8 +97,7 @@ namespace LD24
         {
             return Vector3.Forward;
         }
-
-
+        
         protected RectangleF GetRectF(Vector3 pos)
         {
             return new RectangleF(new Vector2(pos.X - (size.X / 2), pos.Z - (size.Z / 2)), new Vector2(pos.X + (size.X / 2), pos.Z + (size.Z / 2)));

@@ -247,6 +247,9 @@ namespace LD24
             {
                 e.Draw();
             }
+
+
+
         }
 
         public List<Tree> WorldCollision(RectangleF r)

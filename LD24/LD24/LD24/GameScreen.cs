@@ -41,8 +41,14 @@ namespace LD24
             }
 
             island.Draw();
+
+
             
             spriteBatch.Begin();
+            if (RM.IsDown(InputAction.AltFire))
+            {
+                spriteBatch.Draw(RM.GetTexture("cameraoverlay"), new Rectangle(0, 0, G.Width, G.Height), Color.White);
+            }
             spriteBatch.DrawString(font, "test", Vector2.Zero, Color.White);
             spriteBatch.End();
         }

@@ -623,18 +623,8 @@ namespace LD24
     public enum InputAction
     {
         Up, Down, Left, Right, Accept, Back,
-        Fire, AltFire,
-        Jump,
-        PreviousWeapon, NextWeapon,
-        LeftWeaponChange,
-        Weapon1,
-        Weapon2,
-        Weapon3,
-        Weapon4,
-        UnstuckSelf,
-        IncreaseFOV, DecreaseFOV,
-        Zoom,
-
+        Fire, AltFire,        
+        ZoomIn, ZoomOut
     }
 
     public enum MouseButton

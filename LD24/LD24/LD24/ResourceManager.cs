@@ -242,6 +242,8 @@ namespace LD24
             sb.AppendLine("accept:enter");
             sb.AppendLine("fire:LeftMouse");
             sb.AppendLine("altfire:RightMouse");
+            sb.AppendLine("zoomin:Q");
+            sb.AppendLine("zoomout:E");
 
             File.WriteAllText("defaultconfig.txt", sb.ToString());
             File.Copy("defaultconfig.txt", "config.txt", true);

@@ -29,6 +29,9 @@ namespace LD24
             g = this;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            Window.Title = "Species Hunt";
+            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 800;
         }
 
         protected override void Initialize()
@@ -50,6 +53,9 @@ namespace LD24
             RM.AddTexture("treetrunk", Content.Load<Texture2D>("treetrunk"));
             RM.AddTexture("treeleaves", Content.Load<Texture2D>("treeleaves"));
             RM.AddTexture("player", Content.Load<Texture2D>("player"));
+            RM.AddTexture("cameraoverlay", Content.Load<Texture2D>("cameraoverlay"));
+
+
         }
 
         protected override void UnloadContent()

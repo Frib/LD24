@@ -29,13 +29,6 @@ namespace LD24
             if (RM.IsDown(InputAction.Down))
                 moveVector += Vector3.Backward;
 
-            if (RM.IsPressed(InputAction.UnstuckSelf))
-            {
-                this.position.Y = (float)Math.Floor(this.position.Y) + 0.1f;
-                this.position.X = (float)Math.Floor(this.position.X) + 0.5f;
-                this.position.Z = (float)Math.Floor(this.position.Z) + 0.5f;
-            }
-
             MovePlayer(moveVector);
             base.Update();
 
