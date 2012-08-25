@@ -33,10 +33,28 @@ namespace LD24
             else if (upDownRot < -1.34f)
                 upDownRot = -1.34f;
 
+
+            Vector3 moveVector = Vector3.Zero;
             if (IM.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W))
             {
-                position += Vector3.Normalize(GetCameraDirection());
+                moveVector += Vector3.Forward;
             }
+            if (IM.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S))
+            {
+                moveVector += Vector3.Backward;
+            }
+            if (IM.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A))
+            {
+                moveVector += Vector3.Left;
+            }
+            if (IM.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D))
+            {
+                moveVector += Vector3.Right;
+            }
+
+            var transform = Matrix.CreateRotationX(upDownRot) * Matrix.CreateRotationY(leftRightRot);
+
+            position += Vector3.Transform(moveVector, transform);
         }
 
         public void Apply(BasicEffect e)

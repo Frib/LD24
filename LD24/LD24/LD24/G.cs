@@ -43,6 +43,8 @@ namespace LD24
             e = new BasicEffect(GraphicsDevice);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
+            RM.AddTexture("island", Content.Load<Texture2D>("terrain"));
+            RM.AddTexture("grass", Content.Load<Texture2D>("grass"));
         }
 
         protected override void UnloadContent()

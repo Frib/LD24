@@ -10,10 +10,12 @@ namespace LD24
     class GameScreen : Screen
     {
         private Camera camera;
+        private Island island;
         
         public GameScreen(G g) : base(g)
         {
             camera = new Camera();
+            island = new Island();
         }
 
         public override void Update()
@@ -36,12 +38,8 @@ namespace LD24
                 p.Apply();
             }
 
-            GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, new[] { 
-            new VertexPositionColor(new Vector3(0, 0, 0), Color.Red),
-            new VertexPositionColor(new Vector3(1, 0, 0), Color.Green),
-            new VertexPositionColor(new Vector3(1, 1, 0), Color.Blue)
-            }, 0, 1);
-
+            island.Draw();
+            
             spriteBatch.Begin();
             spriteBatch.DrawString(font, "test", Vector2.Zero, Color.White);
             spriteBatch.End();
