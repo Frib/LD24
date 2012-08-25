@@ -9,15 +9,16 @@ namespace LD24
 {
     class GameScreen : Screen
     {
-
+        private Camera camera;
+        
         public GameScreen(G g) : base(g)
         {
-
+            camera = new Camera();
         }
 
         public override void Update()
         {
-
+            camera.Update();
         }
 
         public override void Draw()
@@ -27,9 +28,7 @@ namespace LD24
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
-            e.World = Matrix.Identity;
-            e.View = Matrix.CreateLookAt(new Vector3(0, 0, -2), new Vector3(0, 0, 2), Vector3.Up);
-            e.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(90), 16f / 9f, 0.1f, 10000f);
+            camera.Apply(e);
             e.VertexColorEnabled = true;
 
             foreach (var p in e.CurrentTechnique.Passes)
@@ -46,6 +45,13 @@ namespace LD24
             spriteBatch.Begin();
             spriteBatch.DrawString(font, "test", Vector2.Zero, Color.White);
             spriteBatch.End();
+        }
+
+        public override void Show()
+        {
+            IM.SnapToCenter = true;
+            
+            base.Show();
         }
     }
 }

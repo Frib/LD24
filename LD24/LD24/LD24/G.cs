@@ -35,6 +35,7 @@ namespace LD24
             base.Initialize();
 
             currentScreen = new GameScreen(this);
+            currentScreen.Show();
         }
 
         protected override void LoadContent()
@@ -51,7 +52,8 @@ namespace LD24
 
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            IM.NewState();
+            if (IM.IsKeyDown(Keys.Escape))
                 this.Exit();
 
             currentScreen.Update();
@@ -67,5 +69,9 @@ namespace LD24
 
             base.Draw(gameTime);
         }
+
+        public static bool HasFocus { get { return g.IsActive; } }
+        public static int Width { get { return g.Window.ClientBounds.Width; } }
+        public static int Height { get { return g.Window.ClientBounds.Height; } }
     }
 }
