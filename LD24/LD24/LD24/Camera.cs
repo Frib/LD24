@@ -61,7 +61,9 @@ namespace LD24
 
             var transform = Matrix.CreateRotationX(upDownRot) * Matrix.CreateRotationY(leftRightRot);
 
-            position += Vector3.Transform(moveVector, transform);
+            var newPos = position + Vector3.Transform(moveVector, transform);
+            
+            position = newPos;
         }
 
         public void Apply(BasicEffect e)
@@ -77,7 +79,7 @@ namespace LD24
             Vector3 cameraRotatedUpVector = Vector3.Transform(cameraOriginalUpVector, cameraRotation);
 
             e.View = Matrix.CreateLookAt(position, cameraFinalTarget, cameraRotatedUpVector);
-            e.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(90), (float)G.g.Window.ClientBounds.Width / (float)G.g.Window.ClientBounds.Height, 0.1f, 10000f);
+            e.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(90), (float)G.g.Window.ClientBounds.Width / (float)G.g.Window.ClientBounds.Height, 0.2f, 10000f);
         }
 
         public Vector3 GetCameraDirection()

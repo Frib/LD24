@@ -21,18 +21,19 @@ namespace LD24
         public override void Update()
         {
             camera.Update();
+            island.Update();
+
            // camera.position.Y = island.CheckHeightCollision(camera.position);
         }
 
         public override void Draw()
         {
             GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.BlendState = BlendState.NonPremultiplied;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             camera.Apply(e);
-            e.VertexColorEnabled = true;
 
             foreach (var p in e.CurrentTechnique.Passes)
             {

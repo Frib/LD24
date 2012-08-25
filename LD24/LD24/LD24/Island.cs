@@ -9,12 +9,13 @@ namespace LD24
 {
     class Island
     {
+        QuadTree<Tree> treeCollision;
+
         float scaleHorizontal = 4;
         float scaleVertical = 2;
 
         int treeminy = 40;
         int treemaxy = 150;
-        int treemindist = 4;
         int treeAmount = 1000;
 
         private List<Tree> trees = new List<Tree>();
@@ -24,6 +25,8 @@ namespace LD24
         private VertexPositionNormalTexture[] pointList;
         private float[] heights;
         private VertexBuffer water;
+
+        private List<Entity> entities = new List<Entity>();
 
         public Island()
         {
@@ -71,7 +74,7 @@ namespace LD24
 
         private void CreateEnvironment()
         {
-
+            treeCollision = new QuadTree<Tree>(new RectangleF(new Vector2(0, 0), new Vector2(512 * scaleHorizontal, 512 * scaleHorizontal)));
             for (int i = 0; i < treeAmount; i++)
             {
                 var x = G.r.Next((int)(512 * scaleHorizontal));
@@ -83,9 +86,12 @@ namespace LD24
                     z = G.r.Next((int)(512 * scaleHorizontal));
                     height = CheckHeightCollision(new Vector3(x, 0, z));
                 }
-
-                trees.Add(new Tree(new Vector3(x, height - 8, z)));
+                var tree=  new Tree(new Vector3(x, height - 8, z));
+                trees.Add(tree);
+                treeCollision.Insert(tree);
             }
+
+            entities.Add(new Player(this, new Vector2(2, 4), new Vector3(64, 0, 64)));
         }
 
         private void CreateWater()
@@ -202,7 +208,6 @@ namespace LD24
 
         public void Draw()
         {
-            G.g.e.VertexColorEnabled = false;
             G.g.e.TextureEnabled = true;
             G.g.e.Texture = RM.GetTexture("grass");
             
@@ -226,6 +231,7 @@ namespace LD24
 
             G.g.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
             G.g.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            G.g.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.None };
 
             foreach (var t in trees.OrderBy(x => (x.Position - Camera.c.position).Length()).Reverse())
             {
@@ -235,6 +241,11 @@ namespace LD24
                 G.g.e.Texture = RM.GetTexture("treeleaves");
                 G.g.e.CurrentTechnique.Passes[0].Apply();
                 t.DrawLeaves();
+            }
+
+            foreach (var e in entities)
+            {
+                e.Draw();
             }
         }
 
@@ -277,6 +288,14 @@ namespace LD24
             catch
             {
                 return 0;
+            }
+        }
+
+        internal void Update()
+        {
+            foreach (var e in entities)
+            {
+                e.Update();
             }
         }
     }

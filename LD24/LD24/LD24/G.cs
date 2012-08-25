@@ -34,7 +34,7 @@ namespace LD24
         protected override void Initialize()
         {
             base.Initialize();
-
+            RM.ConfigureKeys();
             currentScreen = new GameScreen(this);
             currentScreen.Show();
         }
@@ -49,6 +49,7 @@ namespace LD24
             RM.AddTexture("water", Content.Load<Texture2D>("water"));
             RM.AddTexture("treetrunk", Content.Load<Texture2D>("treetrunk"));
             RM.AddTexture("treeleaves", Content.Load<Texture2D>("treeleaves"));
+            RM.AddTexture("player", Content.Load<Texture2D>("player"));
         }
 
         protected override void UnloadContent()

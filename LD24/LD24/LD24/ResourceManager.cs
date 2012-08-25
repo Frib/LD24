@@ -238,22 +238,10 @@ namespace LD24
             sb.AppendLine("down:Down,S");
             sb.AppendLine("left:Left,A");
             sb.AppendLine("right:Right,D");
-            sb.AppendLine("jump:Space");
             sb.AppendLine("back:escape");
             sb.AppendLine("accept:enter");
             sb.AppendLine("fire:LeftMouse");
             sb.AppendLine("altfire:RightMouse");
-            sb.AppendLine("previousweapon:Q");
-            sb.AppendLine("nextweapon:E");
-            sb.AppendLine("leftweaponchange:LeftShift,LeftAlt");
-            sb.AppendLine("weapon1:D1");
-            sb.AppendLine("weapon2:D2");
-            sb.AppendLine("weapon3:D3");
-            sb.AppendLine("weapon4:D3");
-            sb.AppendLine("increasefov:OemPeriod");
-            sb.AppendLine("decreasefov:OemComma");
-            sb.AppendLine("unstuckself:F");
-            sb.AppendLine("zoom:MidMouse,LeftControl");
 
             File.WriteAllText("defaultconfig.txt", sb.ToString());
             File.Copy("defaultconfig.txt", "config.txt", true);

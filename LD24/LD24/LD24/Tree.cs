@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LD24
 {
-    class Tree
+    class Tree : IHasRect
     {
         public Vector3 Position;
         private VertexPositionNormalTexture[] trunk;
@@ -17,6 +17,7 @@ namespace LD24
         float trunkwidth = 4f;
         float leafwidth = 12f;
         float leafheight = 12f;
+        private RectangleF rect;
 
         public Tree(Vector3 vector3)
         {
@@ -34,6 +35,8 @@ namespace LD24
             Vector3 f = new Vector3(trunkwidth, trunkheight, 0);
             Vector3 g = new Vector3(trunkwidth, 0, 0);
             Vector3 h = new Vector3(-trunkwidth, 0, 0);
+
+            rect = new RectangleF(new Vector2(Position.X - trunkwidth, Position.Z - trunkwidth), new Vector2(Position.X + trunkwidth, Position.Z + trunkwidth));
             
             trunk[0] = new VertexPositionNormalTexture(h, frontNormal, new Vector2(0, 1));
             trunk[1] = new VertexPositionNormalTexture(e, frontNormal, new Vector2(0, 0));
@@ -68,6 +71,11 @@ namespace LD24
             G.g.e.World = Matrix.CreateRotationY(Camera.c.leftRightRot) * Matrix.CreateTranslation(Position);
             G.g.e.CurrentTechnique.Passes[0].Apply();
             G.g.GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, leaves, 0, 2);
+        }
+
+        public RectangleF Rectangle
+        {
+            get { return rect; }
         }
     }
 }
