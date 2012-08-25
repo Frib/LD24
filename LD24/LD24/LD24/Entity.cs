@@ -67,6 +67,7 @@ namespace LD24
             position += velocity;
             if (!flying)
             position.Y = island.CheckHeightCollision(position);
+
         }
 
         protected virtual void ProcessCollision(Entity e)

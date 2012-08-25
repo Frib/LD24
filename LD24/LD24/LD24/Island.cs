@@ -26,6 +26,7 @@ namespace LD24
 
         private List<Entity> entities = new List<Entity>();
         public float waterheight;
+        internal Player player;
 
         public Island()
         {
@@ -90,7 +91,8 @@ namespace LD24
                 treeCollision.Insert(tree);
             }
 
-            entities.Add(new Player(this, new Vector2(3, 8), new Vector3(512, 0, 512)));
+            player = new Player(this, new Vector2(3, 8), new Vector3(512, 0, 512));
+            entities.Add(player);
             for (int i = 0; i < 100; i++)
             {
                 var x = G.r.Next((int)(512 * scaleHorizontal));

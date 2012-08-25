@@ -9,10 +9,11 @@ namespace LD24
     class PhotoAlbum : Screen
     {
         private GameScreen gameScreen;
-        int offset = 0;
+        int offset;
         public PhotoAlbum(GameScreen gameScreen)
         {
             this.gameScreen = gameScreen;
+            offset = (g.photos.Count - 2) * -330;
         }
         public override void Update()
         {
@@ -22,9 +23,9 @@ namespace LD24
             }
 
             if (RM.IsDown(InputAction.Left))
-                offset += 10;
+                offset += 20;
             if (RM.IsDown(InputAction.Right))
-                offset -= 10;
+                offset -= 20;
 
             if (RM.IsPressed(InputAction.Fire))
             {

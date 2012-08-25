@@ -190,7 +190,15 @@ namespace LD24
             else
             {
                 velocity.X = 0;
-                velocity.Z = 0;                
+                velocity.Z = 0;
+
+                if ((position - island.player.Position).Length() < 12)
+                {
+                    if (G.r.Next(3) == 0)
+                        animation = Animations.flying;
+                    else
+                        animation = Animations.walking;
+                }
             }
 
             if (position.X < 0 || position.Z < 0 || position.X > 512 * island.scaleHorizontal || position.Z > 512 * island.scaleVertical)
