@@ -12,7 +12,7 @@ namespace LD24
         public Player(Island i, Vector2 size, Vector3 pos)
             : base(i,size, pos)
         {
-            eyes = new Vector3(0, 3.25f, 0);
+            eyes = new Vector3(0, size.Y * 0.8125f, 0);
             textureFront = RM.GetTexture("player");
         }
 

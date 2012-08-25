@@ -17,9 +17,7 @@ namespace LD24
         int treeminy = 40;
         int treemaxy = 150;
         int treeAmount = 1000;
-
-        private List<Tree> trees = new List<Tree>();
-
+        
         private List<VertexBuffer> buffers = new List<VertexBuffer>();
 
         private VertexPositionNormalTexture[] pointList;
@@ -86,12 +84,14 @@ namespace LD24
                     z = G.r.Next((int)(512 * scaleHorizontal));
                     height = CheckHeightCollision(new Vector3(x, 0, z));
                 }
-                var tree=  new Tree(new Vector3(x, height - 8, z));
-                trees.Add(tree);
+                var tree=  new Tree(this, new Vector3(x, height - 8, z));
+                entities.Add(tree);
                 treeCollision.Insert(tree);
             }
 
-            entities.Add(new Player(this, new Vector2(2, 4), new Vector3(512, 0, 512)));
+            entities.Add(new Player(this, new Vector2(3, 8), new Vector3(512, 0, 512)));
+            for (int i = 0; i < 100; i++ )
+                entities.Add(G.g.bf.CreateBird(this, new Vector3(540 + i*10, 0, 540)));
         }
 
         private void CreateWater()
@@ -227,23 +227,13 @@ namespace LD24
             G.g.e.CurrentTechnique.Passes[0].Apply();
             G.g.GraphicsDevice.SetVertexBuffer(water);
             G.g.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, water.VertexCount / 3);
-
-
+            
             G.g.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
             G.g.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+            //G.g.GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true, DepthBufferWriteEnable = true, DepthBufferFunction= CompareFunction.LessEqual };
             G.g.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.None };
 
-            foreach (var t in trees.OrderBy(x => (x.Position - Camera.c.position).Length()).Reverse())
-            {
-                G.g.e.Texture = RM.GetTexture("treetrunk");
-                G.g.e.CurrentTechnique.Passes[0].Apply();
-                t.DrawTrunk();
-                G.g.e.Texture = RM.GetTexture("treeleaves");
-                G.g.e.CurrentTechnique.Passes[0].Apply();
-                t.DrawLeaves();
-            }
-
-            foreach (var e in entities)
+            foreach (var e in entities.OrderBy(x => (x.Position - Camera.c.position).Length()).Reverse())
             {
                 e.Draw();
             }
@@ -286,7 +276,7 @@ namespace LD24
                         fHeight += (bl - br) * (1.0f - fSqX);
                     }
 
-                    return fHeight+ 4;
+                    return fHeight;
                 }
                 else
                 {

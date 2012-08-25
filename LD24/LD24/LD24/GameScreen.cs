@@ -35,7 +35,7 @@ namespace LD24
         {
             GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
             GraphicsDevice.BlendState = BlendState.NonPremultiplied;
-            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true, DepthBufferWriteEnable = true };
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             camera.Apply(e);
@@ -47,8 +47,6 @@ namespace LD24
 
             island.Draw();
 
-                       
-            
             spriteBatch.Begin();
             if (RM.IsDown(InputAction.AltFire) && !RM.IsPressed(InputAction.Fire))
             {

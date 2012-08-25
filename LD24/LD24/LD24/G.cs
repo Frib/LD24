@@ -56,7 +56,8 @@ namespace LD24
             RM.AddTexture("player", Content.Load<Texture2D>("player"));
             RM.AddTexture("cameraoverlay", Content.Load<Texture2D>("cameraoverlay"));
 
-
+            bf = new BirdFactory();
+            bf.LoadContent(Content);
         }
 
         protected override void UnloadContent()
@@ -111,5 +112,7 @@ namespace LD24
             currentScreen = newScreen;
             currentScreen.Show();
         }
+
+        internal BirdFactory bf { get; set; }
     }
 }

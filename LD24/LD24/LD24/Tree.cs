@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LD24
 {
-    class Tree : IHasRect
+    class Tree : Entity, IHasRect
     {
         public Vector3 Position;
         private VertexPositionNormalTexture[] trunk;
@@ -19,7 +19,8 @@ namespace LD24
         float leafheight = 12f;
         private RectangleF rect;
 
-        public Tree(Vector3 vector3)
+        public Tree(Island i, Vector3 vector3)
+            : base(i, Vector2.Zero, vector3)
         {
             trunkheight += (float)G.r.NextDouble() * 4f;
             trunkwidth += (float)G.r.NextDouble() * 1f;
@@ -37,7 +38,7 @@ namespace LD24
             Vector3 h = new Vector3(-trunkwidth, 0, 0);
 
             rect = new RectangleF(new Vector2(Position.X - trunkwidth, Position.Z - trunkwidth), new Vector2(Position.X + trunkwidth, Position.Z + trunkwidth));
-            
+
             trunk[0] = new VertexPositionNormalTexture(h, frontNormal, new Vector2(0, 1));
             trunk[1] = new VertexPositionNormalTexture(e, frontNormal, new Vector2(0, 0));
             trunk[2] = new VertexPositionNormalTexture(f, frontNormal, new Vector2(1, 0));
@@ -59,8 +60,18 @@ namespace LD24
 
         }
 
+        public override void Draw()
+        {
+            DrawTrunk();
+            DrawLeaves();
+        }
+
+        public override void Update()
+        {
+        }
         internal void DrawTrunk()
         {
+            G.g.e.Texture = RM.GetTexture("treetrunk");
             G.g.e.World = Matrix.CreateRotationY(Camera.c.leftRightRot) * Matrix.CreateTranslation(Position);
             G.g.e.CurrentTechnique.Passes[0].Apply();
             G.g.GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, trunk, 0, 2);
@@ -68,6 +79,7 @@ namespace LD24
 
         internal void DrawLeaves()
         {
+            G.g.e.Texture = RM.GetTexture("treeleaves");
             G.g.e.World = Matrix.CreateRotationY(Camera.c.leftRightRot) * Matrix.CreateTranslation(Position);
             G.g.e.CurrentTechnique.Passes[0].Apply();
             G.g.GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, leaves, 0, 2);

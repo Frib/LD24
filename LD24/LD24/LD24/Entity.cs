@@ -18,7 +18,6 @@ namespace LD24
         public Vector3 velocity;
 
         public Texture2D textureFront;
-        public Texture2D textureBack;
 
         public Vector3 Center { get { return new Vector3(position.X, position.Y + (size.Y / 2), position.Z); } }
 
@@ -82,11 +81,10 @@ namespace LD24
             G.g.e.CurrentTechnique.Passes[0].Apply();
 
             GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
-
         }
 
         protected VertexPositionNormalTexture[] billboardVertices;
-        private Island island;
+        protected Island island;
         
         protected virtual Matrix GetMatrixChain()
         {

@@ -107,6 +107,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bird.cs" />
+    <Compile Include="BirdFactory.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="GameScreen.cs" />
