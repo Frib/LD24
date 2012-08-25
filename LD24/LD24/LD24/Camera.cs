@@ -9,9 +9,16 @@ namespace LD24
 {
     class Camera
     {
+        public static Camera c;
+
         public Vector3 position = new Vector3(128, 64, 128);
         public float leftRightRot = MathHelper.PiOver2 * -1.75f;
         public float upDownRot = MathHelper.PiOver2 * -0.30f;
+
+        public Camera()
+        {
+            c = this;
+        }
 
         public void Update()
         {

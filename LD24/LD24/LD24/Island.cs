@@ -12,6 +12,13 @@ namespace LD24
         float scaleHorizontal = 4;
         float scaleVertical = 2;
 
+        int treeminy = 40;
+        int treemaxy = 150;
+        int treemindist = 4;
+        int treeAmount = 1000;
+
+        private List<Tree> trees = new List<Tree>();
+
         private List<VertexBuffer> buffers = new List<VertexBuffer>();
 
         private VertexPositionNormalTexture[] pointList;
@@ -59,6 +66,26 @@ namespace LD24
             buffers.Add(vbe);
 
             CreateWater();
+            CreateEnvironment();
+        }
+
+        private void CreateEnvironment()
+        {
+
+            for (int i = 0; i < treeAmount; i++)
+            {
+                var x = G.r.Next((int)(512 * scaleHorizontal));
+                var z = G.r.Next((int)(512 * scaleHorizontal));
+                var height = CheckHeightCollision(new Vector3(x, 0, z));
+                while (height > treemaxy || height < treeminy)
+                {
+                    x = G.r.Next((int)(512 * scaleHorizontal));
+                    z = G.r.Next((int)(512 * scaleHorizontal));
+                    height = CheckHeightCollision(new Vector3(x, 0, z));
+                }
+
+                trees.Add(new Tree(new Vector3(x, height - 8, z)));
+            }
         }
 
         private void CreateWater()
@@ -178,13 +205,12 @@ namespace LD24
             G.g.e.VertexColorEnabled = false;
             G.g.e.TextureEnabled = true;
             G.g.e.Texture = RM.GetTexture("grass");
-
-
+            
             G.g.e.LightingEnabled = true;
             G.g.e.DirectionalLight0.Enabled = true;
             G.g.e.DirectionalLight0.Direction = new Vector3(-1, -1, -1);
-            G.g.e.DirectionalLight0.DiffuseColor = new Vector3(0.4f, 0.5f, 0.4f);
-            G.g.e.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
+            G.g.e.DirectionalLight0.DiffuseColor = new Vector3(0.2f, 0.2f, 0.2f);
+            G.g.e.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
             G.g.e.CurrentTechnique.Passes[0].Apply();
             foreach (var vb in buffers)
             {
@@ -196,6 +222,20 @@ namespace LD24
             G.g.e.CurrentTechnique.Passes[0].Apply();
             G.g.GraphicsDevice.SetVertexBuffer(water);
             G.g.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, water.VertexCount / 3);
+
+
+            G.g.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
+            G.g.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+
+            foreach (var t in trees.OrderBy(x => (x.Position - Camera.c.position).Length()).Reverse())
+            {
+                G.g.e.Texture = RM.GetTexture("treetrunk");
+                G.g.e.CurrentTechnique.Passes[0].Apply();
+                t.DrawTrunk();
+                G.g.e.Texture = RM.GetTexture("treeleaves");
+                G.g.e.CurrentTechnique.Passes[0].Apply();
+                t.DrawLeaves();
+            }
         }
 
         public float CheckHeightCollision(Vector3 location)
@@ -204,7 +244,7 @@ namespace LD24
             {
                 int x = (int)(location.X / scaleHorizontal);
                 int z = (int)(location.Z / scaleHorizontal);
-                if (x >= 0 && x <= 512 && z >= 0 && z <= 512)
+                if (x > 0 && x < 511 && z > 0 && z < 511)
                 {
                     float tl = pointList[(6 * x) + ((6 * z) * 512)].Position.Y;
                     float tr = pointList[(6 * (x + 1)) + ((6 * z) * 512)].Position.Y;

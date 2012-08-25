@@ -19,6 +19,7 @@ namespace LD24
         public GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
         public static G g;
+        public static Random r = new Random();
         public BasicEffect e;
         public SpriteFont font;
         Screen currentScreen;
@@ -46,6 +47,8 @@ namespace LD24
             RM.AddTexture("island", Content.Load<Texture2D>("terrain"));
             RM.AddTexture("grass", Content.Load<Texture2D>("grass"));
             RM.AddTexture("water", Content.Load<Texture2D>("water"));
+            RM.AddTexture("treetrunk", Content.Load<Texture2D>("treetrunk"));
+            RM.AddTexture("treeleaves", Content.Load<Texture2D>("treeleaves"));
         }
 
         protected override void UnloadContent()

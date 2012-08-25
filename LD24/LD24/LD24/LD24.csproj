@@ -116,6 +116,7 @@
     <Compile Include="G.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="Screen.cs" />
+    <Compile Include="Tree.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
