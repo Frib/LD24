@@ -29,6 +29,7 @@ namespace LD24
         {
             this.island = i;
             billboardVertices = new VertexPositionNormalTexture[6];
+            reverseBillboardVertices = new VertexPositionNormalTexture[6];
             Vector3 e = new Vector3(-size.X / 2, size.Y, 0);
             Vector3 f = new Vector3(size.X / 2, size.Y, 0);
             Vector3 g = new Vector3(size.X / 2, 0, 0);
@@ -44,6 +45,14 @@ namespace LD24
             billboardVertices[4] = new VertexPositionNormalTexture(f, frontNormal, new Vector2(1, 0));
             billboardVertices[5] = new VertexPositionNormalTexture(g, frontNormal, new Vector2(1, 1));
             this.Position = pos;
+
+            Vector3 backNormal = new Vector3(0.0f, 0.0f, -1.0f);
+            reverseBillboardVertices[0] = new VertexPositionNormalTexture(h, backNormal, new Vector2(0, 1));
+            reverseBillboardVertices[1] = new VertexPositionNormalTexture(e, backNormal, new Vector2(0, 0));
+            reverseBillboardVertices[2] = new VertexPositionNormalTexture(f, backNormal, new Vector2(1, 0));
+            reverseBillboardVertices[3] = new VertexPositionNormalTexture(h, backNormal, new Vector2(0, 1));
+            reverseBillboardVertices[4] = new VertexPositionNormalTexture(f, backNormal, new Vector2(1, 0));
+            reverseBillboardVertices[5] = new VertexPositionNormalTexture(g, backNormal, new Vector2(1, 1));
         }
 
 
@@ -87,6 +96,7 @@ namespace LD24
         }
 
         protected VertexPositionNormalTexture[] billboardVertices;
+        protected VertexPositionNormalTexture[] reverseBillboardVertices;
         protected Island island;
         protected bool flying;
         

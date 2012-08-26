@@ -34,6 +34,24 @@ namespace LD24
             this.sBeak = beak;
             this.sWing = wing;
         }
+        
+        internal void SetTexturesFront(Texture2D head, Texture2D torso, Texture2D leg, Texture2D beak, Texture2D wing)
+        {
+            this.fHead = head;
+            this.fTorso = torso;
+            this.fLeg = leg;
+            this.fBeak = beak;
+            this.fWing = wing;
+        }
+
+        internal void SetTexturesBack(Texture2D head, Texture2D torso, Texture2D leg, Texture2D wing, Texture2D tail)
+        {
+            this.bHead = head;
+            this.bTorso = torso;
+            this.bLeg = leg;
+            this.bTail = tail;
+            this.bWing = wing;
+        }
 
         public void SetColors(Color HeadColor, Color TailColor, Color TorsoColor, Color WingColor)
         {
@@ -43,43 +61,158 @@ namespace LD24
             this.cWing = WingColor;
         }
 
+        public Texture2D repaint(Texture2D input, Color c)
+        {
+            Color[] data = new Color[input.Width * input.Height];
+            input.GetData<Color>(data);
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i].R != 0)
+                {
+                    data[i] = new Color(c.R, c.G, c.B, data[i].A);
+                }
+            }
+            var result = new Texture2D(G.g.GraphicsDevice, input.Width, input.Height);
+            result.SetData<Color>(data);
+
+            return result;
+        }
+
         public void FinalizeBird()
         {
-            Color[] data = new Color[sHead.Width * sHead.Height];
-            sHead.GetData<Color>(data);
-            for (int i = 0; i < data.Length; i++)
-            {
-                data[i] = new Color(Math.Min(cHead.R, data[i].R), Math.Min(cHead.G, data[i].G), Math.Min(cHead.B, data[i].B), data[i].A);
-            }
-            sHead = new Texture2D(G.g.GraphicsDevice, sHead.Width, sHead.Height);
-            sHead.SetData<Color>(data);
+            sHead = repaint(sHead, cHead);
+            sTorso = repaint(sTorso, cTorso);
+            sTail = repaint(sTail, cTail);
+            sWing = repaint(sWing, cWing);
 
-            sTorso.GetData<Color>(data);
-            for (int i = 0; i < data.Length; i++)
-            {
-                data[i] = new Color(cTorso.R, cTorso.G, cTorso.B, data[i].A);
-            }
-            sTorso = new Texture2D(G.g.GraphicsDevice, sTorso.Width, sTorso.Height);
-            sTorso.SetData<Color>(data);
+            fHead = repaint(fHead, cHead);
+            fTorso = repaint(fTorso, cTorso);
+            fWing = repaint(fWing, cWing);
 
-            sTail.GetData<Color>(data);
-            for (int i = 0; i < data.Length; i++)
-            {
-                data[i] = new Color(cTail.R, cTail.G, cTail.B, data[i].A);
-            }
-            sTail = new Texture2D(G.g.GraphicsDevice, sTail.Width, sTail.Height);
-            sTail.SetData<Color>(data);
-
-            sWing.GetData<Color>(data);
-            for (int i = 0; i < data.Length; i++)
-            {
-                data[i] = new Color(cWing.R, cWing.G, cWing.B, data[i].A);
-            }
-            sWing = new Texture2D(G.g.GraphicsDevice, sWing.Width, sWing.Height);
-            sWing.SetData<Color>(data);
+            bHead = repaint(bHead, cHead);
+            bTorso = repaint(bTorso, cTorso);
+            bWing = repaint(bWing, cWing);
+            bTail = repaint(bTail, cTail);
         }
 
         public override void Draw()
+        {
+            Vector3 dir = velocity;
+            if (velocity.Length() == 0)
+            {
+                dir = Vector3.Transform(Vector3.Forward, Matrix.CreateRotationY(direction));
+            }
+            dir.Normalize();
+            Vector3 fb = Vector3.Transform(Vector3.Left, Matrix.CreateRotationY(direction));
+            Vector3 playerDir = island.player.Position - position;
+            playerDir.Y = 0;
+            if (playerDir.Length() == 0) return;
+            playerDir.Normalize();
+
+            var leftRight = Vector3.Dot(fb, playerDir);
+            var frontBack = Vector3.Dot(dir, playerDir);
+            if (leftRight <= -0.6f)
+                DrawRightSide();
+            else if (leftRight >= 0.6f)
+                DrawLeftSide();
+            else if (frontBack <= -0.5f)
+                DrawBackSide();
+            else
+                DrawFrontSide();
+        }
+
+        private void DrawFrontSide()
+        {
+            G.g.e.World = Matrix.CreateTranslation(0, -size.Y / 2, 0) * Matrix.CreateRotationX(legRightAnim) * Matrix.CreateTranslation(0, size.Y / 2, 0) * Matrix.CreateTranslation(new Vector3(-size.Y / 8, 0, 0)) * GetMatrixChain();
+            DrawTex(fLeg);
+            G.g.e.World = Matrix.CreateTranslation(0, -size.Y / 2, 0) * Matrix.CreateRotationX(legLeftAnim) * Matrix.CreateTranslation(0, size.Y / 2, 0) * Matrix.CreateTranslation(new Vector3(size.Y / 8, 0, 0)) * GetMatrixChain();
+            DrawTex(fLeg);
+
+            G.g.e.World = GetMatrixChain();
+            DrawTex(fTorso);
+
+            G.g.e.World = Matrix.CreateTranslation(-size.Y / 8, -size.Y / 1.5f, 0) * Matrix.CreateRotationZ(wingAnim) * Matrix.CreateTranslation(size.Y / 8, size.Y / 1.5f, 0) * GetMatrixChain();
+            DrawTex(fWing);
+            G.g.e.World = Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateTranslation(size.Y / 8, -size.Y / 1.5f, 0) * Matrix.CreateRotationZ(-wingAnim) * Matrix.CreateTranslation(-size.Y / 8, size.Y / 1.5f, 0) * GetMatrixChain();
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            G.g.GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, reverseBillboardVertices, 0, 2);
+
+            G.g.e.World = Matrix.CreateTranslation(0, headAnim / 8, 0) * GetMatrixChain();
+            DrawTex(fHead);
+            DrawTex(fBeak);
+        }
+
+        private void DrawTex(Texture2D tex)
+        {
+            G.g.e.Texture = tex;
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            G.g.GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
+        }
+
+        private void DrawBackSide()
+        {
+            G.g.e.World = Matrix.CreateTranslation(0, headAnim / 12, 0) * GetMatrixChain();
+            DrawTex(bHead);
+
+            G.g.e.World = Matrix.CreateTranslation(-size.Y / 8, -size.Y / 1.5f, 0) * Matrix.CreateRotationZ(wingAnim) * Matrix.CreateTranslation(size.Y / 8, size.Y / 1.5f, 0) * GetMatrixChain();
+            DrawTex(bWing);
+            G.g.e.World = Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateTranslation(size.Y / 8, -size.Y / 1.5f, 0) * Matrix.CreateRotationZ(-wingAnim) * Matrix.CreateTranslation(-size.Y / 8, size.Y / 1.5f, 0) * GetMatrixChain();
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            G.g.GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, reverseBillboardVertices, 0, 2);
+
+            G.g.e.World = GetMatrixChain();
+            DrawTex(bTorso);
+
+            G.g.e.World = Matrix.CreateTranslation(0, -size.Y / 2, 0) * Matrix.CreateRotationX(-legRightAnim) * Matrix.CreateTranslation(0, size.Y / 2, 0) * Matrix.CreateTranslation(new Vector3(-size.Y / 8, 0, 0)) * GetMatrixChain();
+            DrawTex(bLeg);
+            G.g.e.World = Matrix.CreateTranslation(0, -size.Y / 2, 0) * Matrix.CreateRotationX(-legLeftAnim) * Matrix.CreateTranslation(0, size.Y / 2, 0) * Matrix.CreateTranslation(new Vector3(size.Y / 8, 0, 0)) * GetMatrixChain();
+            DrawTex(bLeg);
+
+            G.g.e.World = Matrix.CreateTranslation(0, tailAnim / 6, 0) * GetMatrixChain();
+            DrawTex(bTail);
+        }
+
+        private void DrawRightSide()
+        {
+            var GraphicsDevice = G.g.GraphicsDevice;
+            G.g.e.World = GetMatrixChain();
+            var reverse = Matrix.CreateRotationY(MathHelper.Pi);
+
+            G.g.e.Texture = sLeg;
+            G.g.e.World = reverse * Matrix.CreateTranslation(new Vector3(0, -size.Y / 3f, 0)) * Matrix.CreateRotationZ(-legLeftAnim) * Matrix.CreateTranslation(new Vector3(0, size.Y / 3f, -0.1f)) * GetMatrixChain();
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
+
+            G.g.e.Texture = sTorso;
+            G.g.e.World = reverse * GetMatrixChain();
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
+
+            G.g.e.Texture = sTail;
+            G.g.e.World = reverse * Matrix.CreateTranslation(new Vector3(size.Y / 4f, -size.Y / 2f, 0)) * Matrix.CreateRotationZ(tailAnim / -2) * Matrix.CreateTranslation(new Vector3(-size.Y / 4f, size.Y / 2f, 0.1f)) * GetMatrixChain();
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
+
+            G.g.e.Texture = sHead;
+            G.g.e.World = reverse * Matrix.CreateTranslation(new Vector3(-size.Y / 4f, -size.Y / 1.6f, 0)) * Matrix.CreateRotationZ(-headAnim / (animation == Animations.eating ? 0.75f : 2)) * Matrix.CreateTranslation(new Vector3(size.Y / 4f, size.Y / 1.6f, 0.1f)) * GetMatrixChain();
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
+
+            G.g.e.Texture = sBeak;
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
+
+            G.g.e.Texture = sLeg;
+            G.g.e.World = reverse * Matrix.CreateTranslation(new Vector3(0, -size.Y / 3f, 0)) * Matrix.CreateRotationZ(-legRightAnim) * Matrix.CreateTranslation(new Vector3(0, size.Y / 3f, 0.1f)) * GetMatrixChain();
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
+
+            G.g.e.Texture = sWing;
+            G.g.e.World = reverse * Matrix.CreateTranslation(new Vector3(-size.Y / 7f, -size.Y / 2f, 0)) * Matrix.CreateRotationZ(-wingAnim * 1.5f) * Matrix.CreateTranslation(new Vector3(size.Y / 7f, size.Y / 2f, 0.25f)) * GetMatrixChain();
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
+        }
+        private void DrawLeftSide()
         {
             var GraphicsDevice = G.g.GraphicsDevice;
             G.g.e.World = GetMatrixChain();
@@ -238,7 +371,6 @@ namespace LD24
                 legLeftAnim = 1f;
                 legRightAnim = 1f;
             }
-
             position += velocity;
             if (!flying)
                 position.Y = island.CheckHeightCollision(position);
@@ -264,6 +396,18 @@ namespace LD24
         private Color cWing;
         private float wingAnim;
         private float direction = MathHelper.ToRadians(G.r.Next(360));
+
+        private Texture2D fHead;
+        private Texture2D fTorso;
+        private Texture2D fLeg;
+        private Texture2D fBeak;
+        private Texture2D fWing;
+        private Texture2D bWing;
+        private Texture2D bTail;
+        private Texture2D bLeg;
+        private Texture2D bTorso;
+        private Texture2D bHead;
+
     }
 
     public enum Animations

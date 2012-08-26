@@ -151,6 +151,7 @@ namespace LD24
 
             player = new Player(this, new Vector2(3, 8), new Vector3(512, 0, 512));
             entities.Add(player);
+
             for (int i = 0; i < birdCount; i++)
             {
                 var x = G.r.Next((int)(512 * scaleHorizontal));

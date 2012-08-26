@@ -14,8 +14,19 @@ namespace LD24
         Texture2D sLeg;
         Texture2D sTail;
         Texture2D sTorso;
-        List<Texture2D> beaks = new List<Texture2D>();
-        private Texture2D sWing;
+        Texture2D sWing;
+        List<Texture2D> sBeaks = new List<Texture2D>();
+        
+        Texture2D fHead;
+        Texture2D fLeg;
+        Texture2D fTorso;
+        Texture2D fWing;
+        List<Texture2D> fBeaks = new List<Texture2D>();
+        private Texture2D bWing;
+        private Texture2D bTorso;
+        private Texture2D bTail;
+        private Texture2D bLeg;
+        private Texture2D bHead;
         
         internal void LoadContent(ContentManager Content)
         {
@@ -25,13 +36,28 @@ namespace LD24
             sTorso = Content.Load<Texture2D>("Bird/Side/Torso");
             sWing = Content.Load<Texture2D>("Bird/Side/Wing");
             for (int i = 1; i < 6; i++)
-                beaks.Add(Content.Load<Texture2D>("Bird/Side/Beak" + i));
+                sBeaks.Add(Content.Load<Texture2D>("Bird/Side/Beak" + i));
+
+            fHead = Content.Load<Texture2D>("Bird/Front/Head");
+            fLeg = Content.Load<Texture2D>("Bird/Front/Leg");
+            fTorso = Content.Load<Texture2D>("Bird/Front/Torso");
+            fWing = Content.Load<Texture2D>("Bird/Front/Wing");
+            for (int i = 1; i < 2; i++)
+                fBeaks.Add(Content.Load<Texture2D>("Bird/Front/Beak" + i));
+
+            bHead = Content.Load<Texture2D>("Bird/Back/Head");
+            bLeg = Content.Load<Texture2D>("Bird/Back/Leg");
+            bTail = Content.Load<Texture2D>("Bird/Back/Tail");
+            bTorso = Content.Load<Texture2D>("Bird/Back/Torso");
+            bWing = Content.Load<Texture2D>("Bird/Back/Wing");
         }
 
         public Bird CreateBird(Island i, Vector3 pos)
         {
             Bird b = new Bird(i, pos);
-            b.SetTexturesSide(sHead, sTorso, sTail, sLeg, beaks.Random(), sWing);
+            b.SetTexturesSide(sHead, sTorso, sTail, sLeg, sBeaks.Random(), sWing);
+            b.SetTexturesFront(fHead, fTorso, fLeg, fBeaks.Random(), fWing);
+            b.SetTexturesBack(bHead, bTorso, bLeg, bWing, bTail);
             Color baseColor = GenColor(Color.White);
             b.SetColors(GenColor(baseColor), GenColor(baseColor), baseColor, GenColor(baseColor));
             b.FinalizeBird();
