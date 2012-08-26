@@ -65,5 +65,25 @@ namespace LD24
                 return "gray";
             return "omg bug :(";
         }
+
+        public static string GetName(this InputAction ia)
+        {
+            switch (ia)
+            {
+                case InputAction.Up: return "Move forward";
+                case InputAction.Down: return "Move backward";
+                case InputAction.Left: return "Move left";
+                case InputAction.Right: return "Move right";
+                case InputAction.Accept: return "Confirm";
+                case InputAction.Back: return "Back";
+                case InputAction.Fire: return "Take photo";
+                case InputAction.AltFire: return "Ready camera";
+                case InputAction.Run: return "Run";
+                case InputAction.ShowAlbum: return "Show album";
+                case InputAction.ZoomIn: return "Zoom in";
+                case InputAction.ZoomOut: return "Zoom out";
+                default: return ia.ToString();
+            }
+        }
     }
 }

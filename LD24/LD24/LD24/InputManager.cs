@@ -372,6 +372,7 @@ namespace LD24
         public static bool StayInWindow { get; set; }
 
         private static StringBuilder charbuffer = new StringBuilder();
+        public static float MouseSensitivity = 0.01005f;
 
         public static void CharacterEntered(char character)
         {

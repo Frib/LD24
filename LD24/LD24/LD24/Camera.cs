@@ -23,13 +23,13 @@ namespace LD24
 
         public void Update()
         {
-            float mouseTime = 0.016f;
+            
 
             float xDifference = IM.MouseDelta.X;
             float yDifference = IM.MouseDelta.Y;
 
-            leftRightRot -= xDifference * mouseTime;
-            upDownRot -= yDifference * mouseTime;
+            leftRightRot -= xDifference * IM.MouseSensitivity;
+            upDownRot -= yDifference * IM.MouseSensitivity;
 
             if (leftRightRot > MathHelper.TwoPi)
                 leftRightRot -= MathHelper.TwoPi;

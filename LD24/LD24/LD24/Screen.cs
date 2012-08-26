@@ -34,5 +34,10 @@ namespace LD24
         internal virtual void AddPhotoData(Photograph pg)
         {
         }
+
+        protected static int CycleIndex(int newValue, int max, int min = 0)
+        {
+            return newValue < 0 ? max : newValue > max ? min : newValue;
+        }
     }
 }

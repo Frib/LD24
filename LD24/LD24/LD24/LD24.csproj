@@ -111,6 +111,7 @@
     <Compile Include="BirdFactory.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Clouds.cs" />
+    <Compile Include="ControlScreen.cs" />
     <Compile Include="Encyclopedia.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Ext.cs" />
@@ -118,6 +119,9 @@
     <Compile Include="GameScreen.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Island.cs" />
+    <Compile Include="MainMenuScreen.cs" />
+    <Compile Include="MenuOption.cs" />
+    <Compile Include="OptionsScreen.cs" />
     <Compile Include="PhotoAlbum.cs" />
     <Compile Include="PhotoDetailScreen.cs" />
     <Compile Include="Photograph.cs" />
@@ -133,6 +137,7 @@
     <Compile Include="Sun.cs" />
     <Compile Include="TerrainBuffer.cs" />
     <Compile Include="Tree.cs" />
+    <Compile Include="WorldConfigScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

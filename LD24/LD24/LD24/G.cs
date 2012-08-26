@@ -39,7 +39,7 @@ namespace LD24
         {
             base.Initialize();
             RM.ConfigureKeys();
-            currentScreen = new GameScreen(this);
+            currentScreen = new MainMenuScreen();
             currentScreen.Show();
         }
 
@@ -48,6 +48,7 @@ namespace LD24
             e = new BasicEffect(GraphicsDevice);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = Content.Load<SpriteFont>("font");
+            RM.font = font;
             RM.AddTexture("island", Content.Load<Texture2D>("terrain"));
             RM.AddTexture("grass", Content.Load<Texture2D>("grass"));
             RM.AddTexture("water", Content.Load<Texture2D>("water"));

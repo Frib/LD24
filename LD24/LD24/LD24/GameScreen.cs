@@ -13,6 +13,7 @@ namespace LD24
         private Island island;
         private int timer;
         private int HiScore;
+        private bool paused;
         
         public GameScreen(G g)
         {
@@ -23,19 +24,38 @@ namespace LD24
 
         public override void Update()
         {
-            if (timer > 0)
+            if (!paused)
             {
-                timer--;
-                if (timer == 0)
-                    CanTakePhoto = true;
+
+                if (timer > 0)
+                {
+                    timer--;
+                    if (timer == 0)
+                        CanTakePhoto = true;
+                }
+                if (RM.IsPressed(InputAction.ShowAlbum))
+                {
+                    g.Showscreen(new PhotoAlbum(this));
+                }
+
+                camera.Update();
+                island.Update();
             }
-            if (RM.IsPressed(InputAction.ShowAlbum))
+            else
             {
-                g.Showscreen(new PhotoAlbum(this));
+                if (RM.IsPressed(InputAction.Accept))
+                {
+                    g.Showscreen(new MainMenuScreen());
+                }
             }
 
-            camera.Update();
-            island.Update();
+            if (RM.IsPressed(InputAction.Back))
+            {
+                paused = !paused;
+
+                IM.SnapToCenter = !paused;
+                g.IsMouseVisible = paused;
+            }
 
            // camera.position.Y = island.CheckHeightCollision(camera.position);
         }
@@ -70,6 +90,13 @@ namespace LD24
                     spriteBatch.Draw(RM.GetTexture("cameraoverlay"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                 }
             }
+            if (paused)
+            {
+                spriteBatch.Draw(RM.GetTexture("grass"), new Rectangle((int)(G.Width * 0.25f), (int)(G.Height * 0.4f), (int)(G.Width * 0.5f), (int)(G.Height * 0.2f)), Color.Black);
+                spriteBatch.DrawString(g.font, "Game paused. Press " + RM.GetButtons(InputAction.Accept).First().ToString() + " to exit", new Vector2(232, G.Height / 2 - 32), Color.Red);
+                spriteBatch.DrawString(g.font, "Press " + RM.GetButtons(InputAction.Back).First().ToString() + " to continue playing", new Vector2(232, G.Height / 2 ), Color.Green);
+            }
+
             spriteBatch.End();
         }
 
