@@ -28,7 +28,7 @@ namespace LD24
                 moveVector += Vector3.Forward;
             if (RM.IsDown(InputAction.Down))
                 moveVector += Vector3.Backward;
-
+            
             MovePlayer(moveVector);
             base.Update();
 
@@ -58,7 +58,7 @@ namespace LD24
             if (rotatedVector.Length() > 0)
             {
                 rotatedVector.Normalize();
-
+                rotatedVector /= 4;
                 velocity.X = rotatedVector.X;
                 velocity.Z = rotatedVector.Z;
             }

@@ -20,7 +20,8 @@ namespace LD24
 
         public Bird(Island i, Vector3 pos) : base(i, new Vector2(1.5f + (float)G.r.NextDouble() *4), pos)
         {
-
+            animation = Animations.walking;
+            
         }
 
         public void SetTexturesSide(Texture2D head, Texture2D torso, Texture2D tail, Texture2D leg, Texture2D beak, Texture2D wing)

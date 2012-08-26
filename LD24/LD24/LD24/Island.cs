@@ -10,6 +10,7 @@ namespace LD24
     class Island
     {
         QuadTree<Tree> treeCollision;
+        List<Tree> trees = new List<Tree>();
 
         public float scaleHorizontal = 4;
         public float scaleVertical = 2;
@@ -17,7 +18,7 @@ namespace LD24
         int treeminy = 40;
         int treemaxy = 150;
         int treeAmount = 1000;
-        
+
         private List<VertexBuffer> buffers = new List<VertexBuffer>();
 
         private VertexPositionNormalTexture[] pointList;
@@ -87,8 +88,8 @@ namespace LD24
                     height = CheckHeightCollision(new Vector3(x, 0, z));
                 }
                 var tree = new Tree(this, new Vector3(x, height - 8, z));
-                entities.Add(tree);
                 treeCollision.Insert(tree);
+                trees.Add(tree);
             }
 
             player = new Player(this, new Vector2(3, 8), new Vector3(512, 0, 512));
@@ -97,8 +98,8 @@ namespace LD24
             {
                 var x = G.r.Next((int)(512 * scaleHorizontal));
                 var z = G.r.Next((int)(512 * scaleHorizontal));
-                entities.Add(G.g.bf.CreateBird(this, new Vector3(x, 32, z)));
-            
+                var bird = G.g.bf.CreateBird(this, new Vector3(x, 32, z));
+                entities.Add(bird);
             }
         }
 
@@ -122,7 +123,7 @@ namespace LD24
                     waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX, waterheight, offY + size), Vector3.Up, new Vector2(0, size));
                     waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX, waterheight, offY + size), Vector3.Up, new Vector2(0, size));
                     waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX + size, waterheight, offY), Vector3.Up, new Vector2(size, 0));
-                    waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX + size, waterheight, offY + size), Vector3.Up, new Vector2(size, size));                    
+                    waters[offset++] = new VertexPositionNormalTexture(new Vector3(offX + size, waterheight, offY + size), Vector3.Up, new Vector2(size, size));
                 }
             }
 
@@ -160,7 +161,7 @@ namespace LD24
         public void WritePointList()
         {
             pointList = new VertexPositionNormalTexture[512 * 512 * 6];
-            
+
             for (int x = 1; x < 512; x++)
             {
                 for (int z = 1; z < 512; z++)
@@ -218,7 +219,7 @@ namespace LD24
         {
             G.g.e.TextureEnabled = true;
             G.g.e.Texture = RM.GetTexture("grass");
-            
+
             G.g.e.LightingEnabled = true;
             G.g.e.DirectionalLight0.Enabled = true;
             G.g.e.DirectionalLight0.Direction = new Vector3(-1, -1, -1);
@@ -235,19 +236,16 @@ namespace LD24
             G.g.e.CurrentTechnique.Passes[0].Apply();
             G.g.GraphicsDevice.SetVertexBuffer(water);
             G.g.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, water.VertexCount / 3);
-            
+
             G.g.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
             G.g.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
             //G.g.GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true, DepthBufferWriteEnable = true, DepthBufferFunction= CompareFunction.LessEqual };
             G.g.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.None };
 
-            foreach (var e in entities.OrderBy(x => (x.Position - Camera.c.position).Length()).Reverse())
+            foreach (var e in entities.Concat(trees).OrderBy(x => (x.Position - Camera.c.position).Length()).Reverse())
             {
                 e.Draw();
             }
-
-
-
         }
 
         public List<Tree> WorldCollision(RectangleF r)
@@ -302,6 +300,20 @@ namespace LD24
             foreach (var e in entities)
             {
                 e.Update();
+            }
+
+            List<Entity> passed = new List<Entity>();
+            foreach (var e in entities)
+            {
+                passed.Add(e);
+                foreach (var e2 in entities.Except(passed))
+                {
+                    if (e.Rectangle.IntersectsWith(e2.Rectangle))
+                    {
+                        e.ProcessCollision(e2);
+                        e2.ProcessCollision(e);
+                    }
+                }
             }
         }
     }

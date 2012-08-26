@@ -285,38 +285,47 @@ namespace LD24
 
     public struct RectangleF
     {
-        Vector2 topLeft;
-        Vector2 bottomRight;
+        BoundingBox box;
+        BoundingBox boxAlt;
+        private float width;
+        private float height;
+        private Vector2 location;
 
         public RectangleF(Vector2 a, Vector2 b)
         {
             Vector2 tl = new Vector2(a.X < b.X ? a.X : b.X, a.Y < b.Y ? a.Y : b.Y);
             Vector2 br = new Vector2(a.X < b.X ? b.X : a.X, a.Y < b.Y ? b.Y : a.Y);
-            topLeft = tl;
-            bottomRight = br;
+
+            box = new BoundingBox(new Vector3(tl.X, -1, tl.Y), new Vector3(br.X, 1, br.Y));
+            boxAlt = new BoundingBox(new Vector3(tl.X, -2, tl.Y), new Vector3(br.X, 2, br.Y));
+
+            width = br.X - tl.X;
+            height = br.Y - tl.Y;
+            location = ((br - tl) / 2) + tl;
+            
         }
 
-        public float Width { get { return bottomRight.X - topLeft.X; } }
-        public float Height { get { return bottomRight.Y - topLeft.Y; } }
+        public float Width { get { return width; } }
+        public float Height { get { return height; } }
 
-        public float Left { get { return topLeft.X; } }
-        public float Right { get { return bottomRight.X; } }
-        public float Top { get { return topLeft.Y; } }
-        public float Bottom { get { return bottomRight.Y; } }
+        public float Left { get { return box.Min.X; } }
+        public float Right { get { return box.Max.X; } }
+        public float Top { get { return box.Min.Z; } }
+        public float Bottom { get { return box.Max.Z; } }
 
-        public Vector2 Location { get { return ((bottomRight - topLeft) / 2) + topLeft; } }
+
+        public Vector2 Location { get { return location; } }
 
         public bool IsEmpty { get { return false; } }
 
         internal bool Contains(RectangleF queryArea)
         {
-            return topLeft.X < queryArea.topLeft.X && topLeft.Y < queryArea.topLeft.Y && bottomRight.X > queryArea.bottomRight.X && bottomRight.Y > queryArea.bottomRight.Y;
+            return boxAlt.Contains(queryArea.box) == ContainmentType.Contains;
         }
 
         internal bool IntersectsWith(RectangleF queryArea)
         {
-            return !(topLeft.X < queryArea.topLeft.X || topLeft.Y < queryArea.topLeft.Y || bottomRight.X > queryArea.bottomRight.X || bottomRight.Y > queryArea.bottomRight.Y);
-        
+            return boxAlt.Intersects(queryArea.box);
         }
     }
 }

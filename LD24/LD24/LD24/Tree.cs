@@ -9,7 +9,6 @@ namespace LD24
 {
     class Tree : Entity, IHasRect
     {
-        public Vector3 Position;
         private VertexPositionNormalTexture[] trunk;
         private VertexPositionNormalTexture[] leaves;
 

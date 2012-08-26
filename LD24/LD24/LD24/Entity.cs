@@ -49,7 +49,8 @@ namespace LD24
         {
             var expectedPos = Position + velocity;
 
-            if (island.WorldCollision(GetRectF(expectedPos)).Any())
+            var collisions = island.WorldCollision(GetRectF(expectedPos)).Except(new[]{this});
+            if (collisions.Any())
             {
                 var posX = Position + new Vector3(velocity.X, 0, 0);
                 var posZ = Position + new Vector3(0, 0, velocity.Z);
@@ -61,16 +62,14 @@ namespace LD24
                 {
                     velocity.Z = 0;
                 }
-
             }
 
             position += velocity;
             if (!flying)
-            position.Y = island.CheckHeightCollision(position);
-
+            position.Y = island.CheckHeightCollision(position);            
         }
 
-        protected virtual void ProcessCollision(Entity e)
+        public virtual void ProcessCollision(Entity e)
         {
 
         }
@@ -102,6 +101,11 @@ namespace LD24
         protected RectangleF GetRectF(Vector3 pos)
         {
             return new RectangleF(new Vector2(pos.X - (size.X / 2), pos.Z - (size.Z / 2)), new Vector2(pos.X + (size.X / 2), pos.Z + (size.Z / 2)));
+        }
+
+        public RectangleF Rectangle
+        {
+            get { return new RectangleF(new Vector2(position.X - (size.X / 2), position.Z - (size.Z / 2)), new Vector2(position.X + (size.X / 2), position.Z + (size.Z / 2))); }
         }
     }
 }
