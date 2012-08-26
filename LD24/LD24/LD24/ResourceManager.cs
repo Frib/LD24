@@ -9,6 +9,7 @@ using System.Reflection;
 using System.IO;
 using System.Globalization;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace LD24
 {
@@ -17,6 +18,10 @@ namespace LD24
     /// </summary>
     public static class RM
     {
+        public static SoundEffect music;
+
+        public static List<SoundEffect> beach = new List<SoundEffect>();
+
         private static Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
         public static void AddTexture(string name, Texture2D tex)
         {
@@ -374,6 +379,7 @@ namespace LD24
         }
 
         public static List<SoundEffectInstance> playingSounds = new List<SoundEffectInstance>();
+        public static bool MusicEnabled = true;
 
         public static void CleanupSounds()
         {

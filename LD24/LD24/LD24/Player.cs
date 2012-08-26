@@ -9,6 +9,7 @@ namespace LD24
 {
     class Player : Entity
     {
+        private int tick;
         public Player(Island i, Vector2 size, Vector3 pos)
             : base(i,size, pos)
         {
@@ -18,6 +19,25 @@ namespace LD24
 
         public override void Update()
         {
+
+
+            if (tick % 600 == 0)
+            {
+                if (position.Y < 15)
+                {
+                    RM.beach.Random().Play();
+                }
+            }
+            if (tick % 3600 == 0)
+            {
+                if (RM.MusicEnabled)
+                {
+                    RM.music.Play();
+                }
+                tick = 0;
+            }
+            tick++;
+
             Vector3 moveVector = Vector3.Zero;
 
             if (RM.IsDown(InputAction.Left))

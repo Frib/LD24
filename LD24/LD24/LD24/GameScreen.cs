@@ -102,11 +102,13 @@ namespace LD24
 
         public override void Show()
         {
+            
+
             IM.SnapToCenter = true;
             g.IsMouseVisible = false;
             base.Show();
         }
-
+        
         internal override void AddPhotoData(Photograph pg)
         {
             CanTakePhoto = false;
