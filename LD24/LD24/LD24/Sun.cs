@@ -10,7 +10,6 @@ namespace LD24
     {
         Vector3 offset;
         float degrees = 0;
-        private int tick;
 
         public Sun(Island island, Vector2 orbit)
             : base(island, new Vector2(4096, 4096), new Vector3(orbit.X, 5120, orbit.Y))

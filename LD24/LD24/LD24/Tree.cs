@@ -57,6 +57,8 @@ namespace LD24
             leaves[4] = new VertexPositionNormalTexture(f, frontNormal, new Vector2(1, 0));
             leaves[5] = new VertexPositionNormalTexture(g, frontNormal, new Vector2(1, 1));
 
+
+            size = new Vector3(rect.Width/2, 0, rect.Height/2);
         }
 
         public override void Draw()
@@ -82,11 +84,6 @@ namespace LD24
             G.g.e.World = Matrix.CreateRotationY(Camera.c.leftRightRot) * Matrix.CreateTranslation(Position);
             G.g.e.CurrentTechnique.Passes[0].Apply();
             G.g.GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, leaves, 0, 2);
-        }
-
-        public RectangleF Rectangle
-        {
-            get { return rect; }
         }
     }
 }

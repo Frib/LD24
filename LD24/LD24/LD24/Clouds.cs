@@ -15,7 +15,6 @@ namespace LD24
         float degreesA = 0;
         float degreesB = 0;
         float degreesC = 0;
-        private int tick;
 
         Texture2D CloudA;
         Texture2D CloudB;
