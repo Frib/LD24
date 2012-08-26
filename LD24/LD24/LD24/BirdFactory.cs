@@ -42,7 +42,7 @@ namespace LD24
             fLeg = Content.Load<Texture2D>("Bird/Front/Leg");
             fTorso = Content.Load<Texture2D>("Bird/Front/Torso");
             fWing = Content.Load<Texture2D>("Bird/Front/Wing");
-            for (int i = 1; i < 2; i++)
+            for (int i = 1; i < 6; i++)
                 fBeaks.Add(Content.Load<Texture2D>("Bird/Front/Beak" + i));
 
             bHead = Content.Load<Texture2D>("Bird/Back/Head");
@@ -54,9 +54,11 @@ namespace LD24
 
         public Bird CreateBird(Island i, Vector3 pos)
         {
+            int beak = G.r.Next(5);
+
             Bird b = new Bird(i, pos);
-            b.SetTexturesSide(sHead, sTorso, sTail, sLeg, sBeaks.Random(), sWing);
-            b.SetTexturesFront(fHead, fTorso, fLeg, fBeaks.Random(), fWing);
+            b.SetTexturesSide(sHead, sTorso, sTail, sLeg, sBeaks[beak], sWing);
+            b.SetTexturesFront(fHead, fTorso, fLeg, fBeaks[beak], fWing);
             b.SetTexturesBack(bHead, bTorso, bLeg, bWing, bTail);
             Color baseColor = GenColor(Color.White);
             b.SetColors(GenColor(baseColor), GenColor(baseColor), baseColor, GenColor(baseColor));

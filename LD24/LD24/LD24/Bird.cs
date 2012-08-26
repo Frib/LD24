@@ -19,7 +19,7 @@ namespace LD24
         private Color cTorso;
 
         public Bird(Island i, Vector3 pos)
-            : base(i, new Vector2(1.5f + (float)G.r.NextDouble() * 4), pos)
+            : base(i, new Vector2(1.5f + (float)G.r.NextDouble() * 6), pos)
         {
             animation = Animations.walking;
 

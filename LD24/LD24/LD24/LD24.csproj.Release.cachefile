@@ -6,6 +6,7 @@ Content\treetrunk.xnb
 Content\treeleaves.xnb
 Content\player.xnb
 Content\cameraoverlay.xnb
+Content\Bird\Side\Beak1.xnb
 Content\Bird\Side\Beak2.xnb
 Content\Bird\Side\Beak3.xnb
 Content\Bird\Side\Beak4.xnb
@@ -14,7 +15,6 @@ Content\Bird\Side\Head.xnb
 Content\Bird\Side\Leg.xnb
 Content\Bird\Side\Tail.xnb
 Content\Bird\Side\Torso.xnb
-Content\Bird\Side\Beak1.xnb
 Content\Bird\Side\wing.xnb
 Content\sun.xnb
 Content\cloud1.xnb
@@ -38,7 +38,3 @@ Content\Bird\Back\Leg.xnb
 Content\Bird\Back\Tail.xnb
 Content\Bird\Back\Torso.xnb
 Content\Bird\Back\Wing.xnb
-Content\Bird\Front\Beak2.xnb
-Content\Bird\Front\Beak3.xnb
-Content\Bird\Front\Beak4.xnb
-Content\Bird\Front\Beak5.xnb

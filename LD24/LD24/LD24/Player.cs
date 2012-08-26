@@ -69,7 +69,7 @@ namespace LD24
                 rotatedVector.Normalize();
                 if (RM.IsDown(InputAction.Run))
                 {
-                    rotatedVector *= 4;
+                    rotatedVector /= 2;
                 }
                 else
                 {

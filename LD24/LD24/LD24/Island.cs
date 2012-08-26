@@ -94,7 +94,7 @@ namespace LD24
                 int level2 = y2 > levelD ? 3 : y2 > levelC ? 2 : y2 > levelB ? 1 : 0;
                 int level3 = y3 > levelD ? 3 : y3 > levelC ? 2 : y3 > levelB ? 1 : 0;
 
-                var bufferToAdd = buffers[level];
+                var bufferToAdd = buffers[(int)Math.Min(level, Math.Min(level2, level3))];
 
                 if (level != level2)
                 {
