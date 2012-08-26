@@ -10,17 +10,57 @@ namespace LD24
     {
         private Photograph photograph;
         private PhotoAlbum photoAlbum;
+        private string name;
+        bool enteringName = false;
 
         public PhotoInfoScreen(Photograph photograph, PhotoAlbum photoAlbum)
         {
             this.photograph = photograph;
             this.photoAlbum = photoAlbum;
+            name = Encyclopedia.GetName(photograph.Bird);
         }
         public override void Update()
         {
-            if (RM.IsPressed(InputAction.Back) || RM.IsPressed(InputAction.AltFire) || RM.IsPressed(InputAction.ShowAlbum))
+            if (!enteringName)
             {
-                g.Showscreen(photoAlbum);
+                if (RM.IsPressed(InputAction.Back) || RM.IsPressed(InputAction.AltFire) || RM.IsPressed(InputAction.ShowAlbum))
+                {
+                    g.Showscreen(photoAlbum);
+                }
+
+                if (string.IsNullOrEmpty(name) && RM.IsPressed(InputAction.Fire) && new Rectangle(96, 324, 276, 24).Intersects(new Rectangle((int)IM.MousePos.X, (int)IM.MousePos.Y, 1, 1)))
+                {
+                    enteringName = true;
+                }
+            }
+            else
+            {
+                foreach (var b in IM.GetPressedKeys())
+                {
+                    var letter = (b.ToString().Split('.').Last().ToLower());
+                    if (letter.Length == 1)
+                    {
+                        char c = char.Parse(letter);
+                        if (char.IsLetterOrDigit(c))
+                        {
+                            name += c;
+                        }
+                    }
+                    if (b == Microsoft.Xna.Framework.Input.Keys.Space)
+                    {
+                        name += " ";
+                    }
+                    if (b == Microsoft.Xna.Framework.Input.Keys.Back)
+                    {
+                        name = new string(name.Take(name.Length - 1).ToArray());
+                    }
+                }
+
+                if (IM.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Enter) || IM.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Escape))
+                {
+                    enteringName = false;
+                    Encyclopedia.NameBird(photograph.Bird, name);
+                }
             }
         }
 
@@ -53,7 +93,7 @@ namespace LD24
                 if (photograph.Bird.cWing != photograph.Bird.cTorso)
                 {
                     spriteBatch.DrawString(g.font, "It has " + photograph.Bird.cWing.ToDescription() + " wings", new Vector2(416, offset), Color.Yellow); offset += 24;
-                } 
+                }
                 if (photograph.Bird.cTail != photograph.Bird.cTorso)
                 {
                     spriteBatch.DrawString(g.font, "and it has a " + photograph.Bird.cTail.ToDescription() + " tail", new Vector2(416, offset), Color.Yellow); offset += 24;
@@ -75,15 +115,24 @@ namespace LD24
                 if (photograph.Bird.BeakType == 4)
                 {
                     beakName = "wide";
-                } 
+                }
                 offset += 24;
                 spriteBatch.DrawString(g.font, "It has a " + beakName + " beak", new Vector2(416, offset), Color.Yellow); offset += 24;
+
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    spriteBatch.DrawString(g.font, "\'" + name + "\'", new Vector2(128, 324), enteringName ? Color.Green : Color.Yellow);
+                }
+                else
+                {
+                    spriteBatch.DrawString(g.font, "Click here to assign name", new Vector2(96, 324), enteringName ? Color.Green : Color.White);
+                }
             }
             else
             {
-                spriteBatch.DrawString(g.font, "A scenic shot", new Vector2(416, offset), Color.Yellow); offset += 24; 
+                spriteBatch.DrawString(g.font, "A scenic shot", new Vector2(416, offset), Color.Yellow); offset += 24;
                 spriteBatch.DrawString(g.font, "Taken with a zoom level of " + (130 - photograph.Zoom), new Vector2(416, offset), Color.Yellow); offset += 24;
-                
             }
 
             spriteBatch.End();

@@ -58,6 +58,7 @@ namespace LD24
 
             spriteBatch.Begin();
             spriteBatch.DrawString(g.font, HiScore.ToString(), new Vector2(16, 16), Color.Yellow);
+            spriteBatch.DrawString(g.font, "Species: " + Encyclopedia.UniquesCount, new Vector2(650, 16), Color.Yellow);
             if (RM.IsDown(InputAction.AltFire))
             {
                 if (RM.IsPressed(InputAction.Fire) && CanTakePhoto)
@@ -97,6 +98,7 @@ namespace LD24
                 pg.Splash = entities.OfType<SplashEffect>().Any();
                 pg.Heading = bird.GetHeading();
                 pg.Zoom = camera.cameraZoom;
+                Encyclopedia.AddBird(bird);
             }
 
             if (pg.CalculateScore() > HiScore)

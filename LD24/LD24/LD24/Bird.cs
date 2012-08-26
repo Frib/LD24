@@ -435,6 +435,8 @@ namespace LD24
         }
 
         public int BeakType { get; set; }
+
+        public string Name { get; set; }
     }
 
     public enum Animations

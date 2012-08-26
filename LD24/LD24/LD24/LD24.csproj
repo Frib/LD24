@@ -111,6 +111,7 @@
     <Compile Include="BirdFactory.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Clouds.cs" />
+    <Compile Include="Encyclopedia.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Ext.cs" />
     <Compile Include="Flower.cs" />
