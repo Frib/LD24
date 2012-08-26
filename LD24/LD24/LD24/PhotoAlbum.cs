@@ -60,6 +60,7 @@ namespace LD24
             for (int i = 0; i < g.photos.Count; i++)
             {
                 spriteBatch.Draw(g.photos[i].Photo, new Rectangle(64 + (i * 330) + offset, 160, 320, 240), Color.White);
+                spriteBatch.DrawString(g.font, g.photos[i].CalculateScore().ToString(), new Vector2(64 + (i * 330) + offset, 360), Color.Yellow);
             }
             spriteBatch.End();
         }

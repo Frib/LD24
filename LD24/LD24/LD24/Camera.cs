@@ -14,7 +14,7 @@ namespace LD24
         public Vector3 position = new Vector3(128, 64, 128);
         public float leftRightRot = MathHelper.PiOver2 * -1.75f;
         public float upDownRot = MathHelper.PiOver2 * -0.30f;
-        private int cameraZoom = 80;
+        public int cameraZoom = 80;
 
         public Camera()
         {
@@ -27,7 +27,7 @@ namespace LD24
 
             float xDifference = IM.MouseDelta.X;
             float yDifference = IM.MouseDelta.Y;
-            
+
             leftRightRot -= xDifference * mouseTime;
             upDownRot -= yDifference * mouseTime;
 
@@ -69,18 +69,39 @@ namespace LD24
 
             Vector3 cameraOriginalTarget = new Vector3(0, 0, -1);
             Vector3 cameraRotatedTarget = Vector3.Transform(cameraOriginalTarget, cameraRotation);
-            Vector3 cameraFinalTarget = position + cameraRotatedTarget;
+            cameraFinalTarget = position + cameraRotatedTarget;
 
             Vector3 cameraOriginalUpVector = new Vector3(0, 1, 0);
-            Vector3 cameraRotatedUpVector = Vector3.Transform(cameraOriginalUpVector, cameraRotation);
+            cameraRotatedUpVector = Vector3.Transform(cameraOriginalUpVector, cameraRotation);
 
-            e.View = Matrix.CreateLookAt(position, cameraFinalTarget, cameraRotatedUpVector);
-            e.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(RM.IsDown(InputAction.AltFire) ? cameraZoom : 80), (float)G.g.Window.ClientBounds.Width / (float)G.g.Window.ClientBounds.Height, 0.2f, 10000f);
+            e.View = View;
+            e.Projection = Projection;
         }
 
         public Vector3 GetCameraDirection()
         {
             return new Vector3(-(float)Math.Sin(leftRightRot), (float)upDownRot, -(float)Math.Cos(leftRightRot));
+        }
+
+        private Vector3 cameraFinalTarget;
+        private Vector3 cameraRotatedUpVector;
+
+        public Matrix View
+        {
+            get
+            {
+                return Matrix.CreateLookAt(position, cameraFinalTarget, cameraRotatedUpVector);
+            }
+        }
+
+        public Matrix Projection
+        {
+            get { return Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(RM.IsDown(InputAction.AltFire) ? cameraZoom : 80), (float)G.g.Window.ClientBounds.Width / (float)G.g.Window.ClientBounds.Height, 0.2f, 10000f); }
+        }
+
+        public Matrix ZoomProjection
+        {
+             get { return Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(cameraZoom/2.5f), (float)G.g.Window.ClientBounds.Width / (float)G.g.Window.ClientBounds.Height, 0.2f, 10000f); }
         }
     }
 }

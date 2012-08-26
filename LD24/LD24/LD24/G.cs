@@ -81,7 +81,7 @@ namespace LD24
             IM.NewState();
 
             currentScreen.Update();
-            if (RM.IsDown(InputAction.AltFire) && RM.IsPressed(InputAction.Fire))
+            if (currentScreen.CanTakePhoto && RM.IsDown(InputAction.AltFire) && RM.IsPressed(InputAction.Fire))
             {
                 int scale = 2;
                 RenderTarget2D screenshot = new RenderTarget2D(GraphicsDevice, 800 * scale, 600 * scale, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
@@ -98,6 +98,8 @@ namespace LD24
                 Photograph pg = new Photograph(shot);
                 photos.Add(pg);
                 screenshot.Dispose();
+
+                currentScreen.AddPhotoData(pg);
             }
 
             base.Update(gameTime);

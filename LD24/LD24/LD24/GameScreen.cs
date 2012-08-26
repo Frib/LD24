@@ -11,15 +11,23 @@ namespace LD24
     {
         private Camera camera;
         private Island island;
+        private int timer;
         
         public GameScreen(G g)
         {
             camera = new Camera();
             island = new Island();
+            CanTakePhoto = true;
         }
 
         public override void Update()
         {
+            if (timer > 0)
+            {
+                timer--;
+                if (timer == 0)
+                    CanTakePhoto = true;
+            }
             if (RM.IsPressed(InputAction.ShowAlbum))
             {
                 g.Showscreen(new PhotoAlbum(this));
@@ -48,9 +56,16 @@ namespace LD24
             island.Draw();
 
             spriteBatch.Begin();
-            if (RM.IsDown(InputAction.AltFire) && !RM.IsPressed(InputAction.Fire))
+            if (RM.IsDown(InputAction.AltFire))
             {
-                spriteBatch.Draw(RM.GetTexture("cameraoverlay"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                if (RM.IsPressed(InputAction.Fire) && CanTakePhoto)
+                {
+
+                }
+                else
+                {
+                    spriteBatch.Draw(RM.GetTexture("cameraoverlay"), new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                }
             }
             spriteBatch.End();
         }
@@ -60,6 +75,29 @@ namespace LD24
             IM.SnapToCenter = true;
             g.IsMouseVisible = false;
             base.Show();
+        }
+
+        internal override void AddPhotoData(Photograph pg)
+        {
+            CanTakePhoto = false;
+            timer = 60;
+
+            BoundingFrustum bf = new BoundingFrustum(camera.View * camera.ZoomProjection);
+            var entities = island.GetEntitiesInView(bf);
+            Console.WriteLine(entities.Count());
+            var bird = entities.OfType<Bird>().OrderBy(x => (x.Position - island.player.Position).Length()).FirstOrDefault();
+            if (bird != null)
+            {
+                pg.Bird = bird;
+                pg.animation = bird.animation;
+                pg.Distance = (bird.Position - island.player.Position).Length();
+                pg.Splash = entities.OfType<SplashEffect>().Any();
+                pg.Heading = bird.GetHeading();
+                pg.Zoom = camera.cameraZoom;
+            }
+
+            Console.Write(pg.ToString());
+
         }
     }
 }

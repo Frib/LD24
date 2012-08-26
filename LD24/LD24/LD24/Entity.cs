@@ -120,9 +120,14 @@ namespace LD24
             get { return new RectangleF(new Vector2(position.X - (size.X / 2), position.Z - (size.Z / 2)), new Vector2(position.X + (size.X / 2), position.Z + (size.Z / 2))); }
         }
 
-        public float VectorToRadians(Vector3 d)
+        public BoundingBox Box
         {
-            return (float)Math.Atan2(d.X, d.Z) + MathHelper.PiOver2;
+            get
+            {
+                var a = new Vector3(position.X - (size.X / 2), position.Y, position.Z - (size.Z / 2));
+                var b = new Vector3(position.X + (size.X / 2), position.Y + size.Y, position.Z + (size.Z / 2));
+                return new BoundingBox(a, b);
+            }
         }
     }
 }

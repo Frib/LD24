@@ -395,5 +395,10 @@ namespace LD24
         {
             entitiesToAdd.Add(e);
         }
+
+        internal IEnumerable<Entity> GetEntitiesInView(BoundingFrustum bf)
+        {
+            return entities.Where(x => bf.Contains(x.Box) == ContainmentType.Contains).Except(new[]{player});
+        }
     }
 }

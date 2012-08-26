@@ -14,9 +14,9 @@ namespace LD24
         private Texture2D sTail;
         private Texture2D sLeg;
         private Texture2D sBeak;
-        private Color cHead;
-        private Color cTail;
-        private Color cTorso;
+        internal Color cHead;
+        internal Color cTail;
+        internal Color cTorso;
 
         public Bird(Island i, Vector3 pos)
             : base(i, new Vector2(1.5f + (float)G.r.NextDouble() * 6), pos)
@@ -34,7 +34,7 @@ namespace LD24
             this.sBeak = beak;
             this.sWing = wing;
         }
-        
+
         internal void SetTexturesFront(Texture2D head, Texture2D torso, Texture2D leg, Texture2D beak, Texture2D wing)
         {
             this.fHead = head;
@@ -338,7 +338,7 @@ namespace LD24
             {
                 var d = new Vector3(256 * island.scaleHorizontal, 0, 256 * island.scaleVertical) - position;
                 d.Normalize();
-                direction = (float)Math.Atan2(d.X, d.Z) + MathHelper.PiOver2;
+                direction = (float)Math.Atan2(d.X, d.Z) + MathHelper.Pi;
             }
 
             legLeftAnim = 0f;
@@ -384,7 +384,7 @@ namespace LD24
             }
         }
 
-        Animations animation = Animations.idle;
+        internal Animations animation = Animations.idle;
         int tick;
         int animationTick;
 
@@ -393,7 +393,7 @@ namespace LD24
         private float tailAnim;
         private float headAnim;
         private Texture2D sWing;
-        private Color cWing;
+        internal Color cWing;
         private float wingAnim;
         private float direction = MathHelper.ToRadians(G.r.Next(360));
 
@@ -408,11 +408,41 @@ namespace LD24
         private Texture2D bTorso;
         private Texture2D bHead;
 
+        public Heading GetHeading()
+        {
+            Vector3 dir = velocity;
+            if (velocity.Length() == 0)
+            {
+                dir = Vector3.Transform(Vector3.Forward, Matrix.CreateRotationY(direction));
+            }
+            dir.Normalize();
+            Vector3 fb = Vector3.Transform(Vector3.Left, Matrix.CreateRotationY(direction));
+            Vector3 playerDir = island.player.Position - position;
+            playerDir.Y = 0;
+            if (playerDir.Length() == 0) return LD24.Heading.Front;
+            playerDir.Normalize();
+
+            var leftRight = Vector3.Dot(fb, playerDir);
+            var frontBack = Vector3.Dot(dir, playerDir);
+            if (leftRight <= -0.6f)
+                return LD24.Heading.Side;
+            else if (leftRight >= 0.6f)
+                return LD24.Heading.Side;
+            else if (frontBack <= -0.5f)
+                return LD24.Heading.Back;
+            else
+                return LD24.Heading.Front;
+        }
     }
 
     public enum Animations
     {
         idle, walking, eating, flying,
         landing
+    }
+
+    public enum Heading
+    {
+        Front, Side, Back
     }
 }

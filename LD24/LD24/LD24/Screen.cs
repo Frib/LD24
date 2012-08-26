@@ -28,5 +28,11 @@ namespace LD24
         public virtual void Hide(){}
 
         public G g { get; set; }
+
+        public bool CanTakePhoto = false;
+
+        internal virtual void AddPhotoData(Photograph pg)
+        {
+        }
     }
 }
