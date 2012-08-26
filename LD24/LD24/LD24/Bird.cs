@@ -18,10 +18,11 @@ namespace LD24
         private Color cTail;
         private Color cTorso;
 
-        public Bird(Island i, Vector3 pos) : base(i, new Vector2(1.5f + (float)G.r.NextDouble() *4), pos)
+        public Bird(Island i, Vector3 pos)
+            : base(i, new Vector2(1.5f + (float)G.r.NextDouble() * 4), pos)
         {
             animation = Animations.walking;
-            
+
         }
 
         public void SetTexturesSide(Texture2D head, Texture2D torso, Texture2D tail, Texture2D leg, Texture2D beak, Texture2D wing)
@@ -117,13 +118,14 @@ namespace LD24
             G.g.e.CurrentTechnique.Passes[0].Apply();
             GraphicsDevice.DrawUserPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, billboardVertices, 0, 2);
         }
-        
+
         public override void Update()
         {
             tick++;
             animationTick++;
-            if (tick % 180 == 0)
+            if (tick > 120 && G.r.Next(20) == 0)
             {
+                tick = 0;
                 if (animation == Animations.flying)
                 {
                     if (G.r.Next(10) == 2)
@@ -135,13 +137,13 @@ namespace LD24
                 {
                     if (G.r.Next(3) == 1 || animation == Animations.eating)
                     {
-                        int i= G.r.Next(4);
-                        switch(i)
+                        int i = G.r.Next(4);
+                        switch (i)
                         {
                             case 0: animation = Animations.idle; break;
                             case 1: animation = Animations.eating; break;
                             case 2: animation = Animations.walking; direction = G.r.Next(360); break;
-                            case 3: animation = Animations.flying; flying = true; direction = G.r.Next(360); break;                            
+                            case 3: animation = Animations.flying; flying = true; direction = G.r.Next(360); break;
                         }
                     }
                 }
@@ -174,7 +176,7 @@ namespace LD24
             if (animation == Animations.flying || animation == Animations.walking || animation == Animations.landing)
             {
                 direction += MathHelper.ToRadians(G.r.Next(11) - 5);
-                
+
                 Matrix cameraRotation = Matrix.CreateRotationY(direction);
                 Vector3 rotatedVector = Vector3.Transform(Vector3.Forward, cameraRotation);
                 if (rotatedVector.Length() > 0)
@@ -192,14 +194,11 @@ namespace LD24
             {
                 velocity.X = 0;
                 velocity.Z = 0;
-
-                if ((position - island.player.Position).Length() < 12)
-                {
-                    if (G.r.Next(3) == 0)
-                        animation = Animations.flying;
-                    else
-                        animation = Animations.walking;
-                }
+            }
+            if ((position - island.player.Position).Length() < (RM.IsDown(InputAction.Run) ? 50 : 20))
+            {
+                animation = Animations.flying;
+                flying = true;
             }
 
             if (position.X < 0 || position.Z < 0 || position.X > 512 * island.scaleHorizontal || position.Z > 512 * island.scaleVertical)
@@ -207,7 +206,7 @@ namespace LD24
                 var d = new Vector3(256 * island.scaleHorizontal, 0, 256 * island.scaleVertical) - position;
                 d.Normalize();
                 direction = (float)Math.Atan2(d.X, d.Z) + MathHelper.PiOver2;
-            } 
+            }
 
             legLeftAnim = 0f;
             legRightAnim = 0f;

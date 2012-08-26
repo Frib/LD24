@@ -9,15 +9,26 @@ namespace LD24
 {
     class Island
     {
+        public static int treeminy = 40;
+        public static int treemaxy = 150;
+        public static int treeAmount = 400;
+
+        public static int flowerminy = 20;
+        public static int flowermaxy = 100;
+        public static int flowerAmount = 300;
+        public static int flowerRenderDist = 500;
+
+        public static int birdCount = 200;
+
+
         QuadTree<Tree> treeCollision;
-        List<Tree> trees = new List<Tree>();
+        List<Entity> plantsandshit = new List<Entity>();
 
         public float scaleHorizontal = 4;
         public float scaleVertical = 2;
 
-        int treeminy = 40;
-        int treemaxy = 150;
-        int treeAmount = 1000;
+
+
 
         private List<VertexBuffer> buffers = new List<VertexBuffer>();
 
@@ -31,6 +42,7 @@ namespace LD24
         private Sun sun;
         private Clouds clouds;
         private List<Entity> entitiesToAdd = new List<Entity>();
+
 
         public Island()
         {
@@ -95,12 +107,27 @@ namespace LD24
                 }
                 var tree = new Tree(this, new Vector3(x, height - 8, z));
                 treeCollision.Insert(tree);
-                trees.Add(tree);
+                plantsandshit.Add(tree);
+            }
+
+            for (int i = 0; i < flowerAmount; i++)
+            {
+                var x = G.r.Next((int)(512 * scaleHorizontal));
+                var z = G.r.Next((int)(512 * scaleHorizontal));
+                var height = CheckHeightCollision(new Vector3(x, 0, z));
+                while (height > flowermaxy || height < flowerminy)
+                {
+                    x = G.r.Next((int)(512 * scaleHorizontal));
+                    z = G.r.Next((int)(512 * scaleHorizontal));
+                    height = CheckHeightCollision(new Vector3(x, 0, z));
+                }
+                var flower = new Flower(this, new Vector3(x, height, z));
+                plantsandshit.Add(flower);
             }
 
             player = new Player(this, new Vector2(3, 8), new Vector3(512, 0, 512));
             entities.Add(player);
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < birdCount; i++)
             {
                 var x = G.r.Next((int)(512 * scaleHorizontal));
                 var z = G.r.Next((int)(512 * scaleHorizontal));
@@ -256,7 +283,7 @@ namespace LD24
             //G.g.GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true, DepthBufferWriteEnable = true, DepthBufferFunction= CompareFunction.LessEqual };
             G.g.GraphicsDevice.RasterizerState = new RasterizerState() { CullMode = CullMode.None };
 
-            foreach (var e in entities.Concat(trees).OrderBy(x => (x.Position - Camera.c.position).Length()).Reverse())
+            foreach (var e in entities.Concat(plantsandshit).OrderBy(x => (x.Position - Camera.c.position).Length()).Reverse())
             {
                 e.Draw();
             }
@@ -318,19 +345,19 @@ namespace LD24
                 e.Update();
             }
 
-            List<Entity> passed = new List<Entity>();
-            foreach (var e in entities)
-            {
-                passed.Add(e);
-                foreach (var e2 in entities.Except(passed))
-                {
-                    if (e.Rectangle.IntersectsWith(e2.Rectangle))
-                    {
-                        e.ProcessCollision(e2);
-                        e2.ProcessCollision(e);
-                    }
-                }
-            }
+            //List<Entity> passed = new List<Entity>();
+            //foreach (var e in entities)
+            //{
+            //    passed.Add(e);
+            //    foreach (var e2 in entities.Except(passed))
+            //    {
+            //        if (e.Rectangle.IntersectsWith(e2.Rectangle))
+            //        {
+            //            e.ProcessCollision(e2);
+            //            e2.ProcessCollision(e);
+            //        }
+            //    }
+            //}
 
             entities = entities.Where(x => !x.removeMe).ToList();
             entities.AddRange(entitiesToAdd);

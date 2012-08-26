@@ -62,6 +62,10 @@ namespace LD24
             RM.AddTexture("splash1", Content.Load<Texture2D>("splash1"));
             RM.AddTexture("splash2", Content.Load<Texture2D>("splash2"));
             RM.AddTexture("splash3", Content.Load<Texture2D>("splash3"));
+            RM.AddTexture("flowerstem", Content.Load<Texture2D>( "flowerstem"));
+            RM.AddTexture("flowercore", Content.Load<Texture2D>( "flowercore"));
+            RM.AddTexture("flowerleaves", Content.Load<Texture2D>("flowerleaves"));
+            RM.AddTexture("sand", Content.Load<Texture2D>("sand"));
             bf = new BirdFactory();
             bf.LoadContent(Content);
         }
@@ -76,16 +80,6 @@ namespace LD24
             IM.NewState();
 
             currentScreen.Update();
-
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            currentScreen.Draw();
-
             if (RM.IsDown(InputAction.AltFire) && RM.IsPressed(InputAction.Fire))
             {
                 int scale = 2;
@@ -104,6 +98,15 @@ namespace LD24
                 photos.Add(pg);
                 screenshot.Dispose();
             }
+
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            Console.WriteLine(gameTime.IsRunningSlowly);
+            currentScreen.Draw();
 
             base.Draw(gameTime);
         }

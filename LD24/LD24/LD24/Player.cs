@@ -30,6 +30,15 @@ namespace LD24
                 moveVector += Vector3.Backward;
             
             MovePlayer(moveVector);
+
+            var newYa = island.CheckHeightCollision(position + new Vector3(velocity.X, 0, 0));
+            var newYb = island.CheckHeightCollision(position + new Vector3(0, 0, velocity.Z));
+            float level = island.waterheight - 2;
+            if (newYa < level)
+                velocity.X = 0;
+            if (newYb < level)
+                velocity.Z = 0;
+
             base.Update();
 
             rotation = Matrix.CreateRotationX(Camera.c.upDownRot) * Matrix.CreateRotationY(Camera.c.leftRightRot);
