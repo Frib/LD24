@@ -28,6 +28,7 @@ namespace LD24
         private List<Entity> entities = new List<Entity>();
         public float waterheight;
         internal Player player;
+        private Sun sun;
 
         public Island()
         {
@@ -71,6 +72,8 @@ namespace LD24
 
             CreateWater();
             CreateEnvironment();
+
+            sun = new Sun(this, new Vector2((512 * scaleHorizontal) / 2, (512 * scaleHorizontal) / 2));
         }
 
         private void CreateEnvironment()
@@ -218,13 +221,20 @@ namespace LD24
         public void Draw()
         {
             G.g.e.TextureEnabled = true;
-            G.g.e.Texture = RM.GetTexture("grass");
+            G.g.e.LightingEnabled = false;
+            G.g.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            G.g.e.CurrentTechnique.Passes[0].Apply();
+            sun.Draw();
 
             G.g.e.LightingEnabled = true;
             G.g.e.DirectionalLight0.Enabled = true;
-            G.g.e.DirectionalLight0.Direction = new Vector3(-1, -1, -1);
-            G.g.e.DirectionalLight0.DiffuseColor = new Vector3(0.2f, 0.2f, 0.2f);
+            G.g.e.DirectionalLight0.Direction = sun.GetDirection();
+            G.g.e.DirectionalLight0.DiffuseColor = new Vector3(0.25f, 0.25f, 0.25f);
             G.g.e.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
+
+            G.g.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
+            G.g.e.Texture = RM.GetTexture("grass");
+            G.g.e.World = Matrix.Identity;
             G.g.e.CurrentTechnique.Passes[0].Apply();
             foreach (var vb in buffers)
             {
@@ -297,6 +307,7 @@ namespace LD24
 
         internal void Update()
         {
+            sun.Update();
             foreach (var e in entities)
             {
                 e.Update();

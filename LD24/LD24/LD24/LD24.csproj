@@ -125,6 +125,7 @@
     <Compile Include="QuadTree.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="Screen.cs" />
+    <Compile Include="Sun.cs" />
     <Compile Include="Tree.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -107,5 +107,10 @@ namespace LD24
         {
             get { return new RectangleF(new Vector2(position.X - (size.X / 2), position.Z - (size.Z / 2)), new Vector2(position.X + (size.X / 2), position.Z + (size.Z / 2))); }
         }
+
+        public float VectorToRadians(Vector3 d)
+        {
+            return (float)Math.Atan2(d.X, d.Z) + MathHelper.PiOver2;
+        }
     }
 }
