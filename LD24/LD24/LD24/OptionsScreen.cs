@@ -33,7 +33,9 @@ namespace LD24
             options.Add(new MenuOption("Invert Horizontal: " + IM.InvertedHorizontal, RM.font) { Action = new Action(() => { IM.InvertedHorizontal = !IM.InvertedHorizontal; needsUpdate = true; }) });
             options.Add(new MenuOption("Invert Vertical: " + IM.InvertedVertical, RM.font) { Action = new Action(() => { IM.InvertedVertical = !IM.InvertedVertical; needsUpdate = true; }) });
             options.Add(new MenuOption("Volume: " + ((RM.Volume == 0) ? "No sound" : (RM.Volume == 1) ? "Quieter" : "Full volume"), RM.font) { Action = new Action(() => { RM.Volume++; if (RM.Volume > 2) { RM.Volume = 0;} needsUpdate = true; }) });
+            options.Add(new MenuOption("Autosave photos to disk: " + Photograph.Autosave, RM.font) { Action = new Action(() => { Photograph.Autosave = !Photograph.Autosave; needsUpdate = true; }) });
             options.Add(new MenuOption("", RM.font) { Action = new Action(() => { })});
+            options.Add(new MenuOption("Toggle Fullscreen", RM.font) { Action = new Action(() => { g.graphics.ToggleFullScreen(); }) });
 
             options.Add(new MenuOption("Increase sensitivity: " + (int)(IM.MouseSensitivity * 10000), RM.font) { Action = new Action(() => { IM.MouseSensitivity += 0.0005f; if (IM.MouseSensitivity > 0.02f) { IM.MouseSensitivity = 0.0005f; } needsUpdate=true;}) });
             options.Add(new MenuOption("Decrease", RM.font) { Action = new Action(() => { IM.MouseSensitivity -= 0.0005f; if (IM.MouseSensitivity <= 0.0004f) { IM.MouseSensitivity = 0.02f; } needsUpdate = true; }) });
@@ -51,7 +53,7 @@ namespace LD24
             foreach (var o in options)
             {
                 o.Position = new Vector2(128, offsetY);
-                offsetY += 64;
+                offsetY += 48;
             }
         }
 

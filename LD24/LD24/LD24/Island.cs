@@ -18,7 +18,7 @@ namespace LD24
         public static int flowerAmount = 300;
         public static int flowerRenderDist = 500;
 
-        public static int birdCount = 200;
+        public static int birdCount = 100;
 
         int levelB = 18;
         int levelC = 30;
@@ -285,8 +285,8 @@ namespace LD24
             G.g.e.LightingEnabled = true;
             G.g.e.DirectionalLight0.Enabled = true;
             G.g.e.DirectionalLight0.Direction = sun.GetDirection();
-            G.g.e.DirectionalLight0.DiffuseColor = new Vector3(0.25f, 0.25f, 0.25f);
-            G.g.e.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
+            G.g.e.DirectionalLight0.DiffuseColor = new Vector3(0.4f, 0.4f, 0.4f);
+            G.g.e.AmbientLightColor = new Vector3(0.4f, 0.4f, 0.4f);
 
             G.g.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
             G.g.e.Texture = RM.GetTexture("grass");

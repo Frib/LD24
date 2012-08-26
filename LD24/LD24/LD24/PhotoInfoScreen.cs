@@ -37,7 +37,11 @@ namespace LD24
             {
                 foreach (var b in IM.GetPressedKeys())
                 {
-                    var letter = (b.ToString().Split('.').Last().ToLower());
+                    var letter = (b.ToString().Split('.').Last()).ToLower();
+                    if (IM.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift) || IM.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.RightShift))
+                    {
+                        letter = letter.ToUpper();
+                    }
                     if (letter.Length == 1)
                     {
                         char c = char.Parse(letter);

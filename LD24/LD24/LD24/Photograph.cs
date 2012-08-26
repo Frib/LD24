@@ -10,11 +10,16 @@ namespace LD24
 {
     class Photograph
     {
+        public static bool Autosave;
         public Texture2D Photo { get; set; }
 
         public Photograph(Texture2D photo)
         {
             this.Photo = photo;
+            if (Autosave)
+            {
+                Save();
+            }
         }
 
         public Bird Bird { get; set; }
