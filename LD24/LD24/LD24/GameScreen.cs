@@ -20,7 +20,7 @@ namespace LD24
 
         public override void Update()
         {
-            if (RM.IsPressed(InputAction.Back))
+            if (RM.IsPressed(InputAction.ShowAlbum))
             {
                 g.Showscreen(new PhotoAlbum(this));
             }

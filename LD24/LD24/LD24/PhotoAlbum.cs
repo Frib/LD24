@@ -17,7 +17,7 @@ namespace LD24
         }
         public override void Update()
         {
-            if (RM.IsPressed(InputAction.Back))
+            if (RM.IsPressed(InputAction.Back) || RM.IsPressed(InputAction.ShowAlbum))
             {
                 g.Showscreen(gameScreen);
             }
@@ -26,6 +26,7 @@ namespace LD24
                 offset += 20;
             if (RM.IsDown(InputAction.Right))
                 offset -= 20;
+            offset -= IM.ScrollDelta;
 
             if (RM.IsPressed(InputAction.Fire))
             {

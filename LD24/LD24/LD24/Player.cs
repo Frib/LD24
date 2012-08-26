@@ -58,7 +58,14 @@ namespace LD24
             if (rotatedVector.Length() > 0)
             {
                 rotatedVector.Normalize();
-                rotatedVector /= 4;
+                if (RM.IsDown(InputAction.Run))
+                {
+                    rotatedVector /= 2;
+                }
+                else
+                {
+                    rotatedVector /= 4;
+                }
                 velocity.X = rotatedVector.X;
                 velocity.Z = rotatedVector.Z;
             }

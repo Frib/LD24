@@ -238,6 +238,8 @@ namespace LD24
             sb.AppendLine("down:Down,S");
             sb.AppendLine("left:Left,A");
             sb.AppendLine("right:Right,D");
+            sb.AppendLine("run:LeftShift,Space");
+            sb.AppendLine("showalbum:Tab,B,J");
             sb.AppendLine("back:escape");
             sb.AppendLine("accept:enter");
             sb.AppendLine("fire:LeftMouse");

@@ -623,8 +623,9 @@ namespace LD24
     public enum InputAction
     {
         Up, Down, Left, Right, Accept, Back,
-        Fire, AltFire,        
-        ZoomIn, ZoomOut
+        Fire, AltFire,
+        ZoomIn, ZoomOut,
+        Run, ShowAlbum
     }
 
     public enum MouseButton
