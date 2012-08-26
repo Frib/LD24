@@ -78,6 +78,11 @@ namespace LD24
                 o.Draw(selected == o ? Color.White : Color.Yellow);
 
             }
+
+            sb.Draw(RM.GetTexture("wish"), new Rectangle(400, 64, 320, 240), Color.White);
+            sb.DrawString(RM.font, "Species Hunt!", new Vector2(464, 320), Color.Green);
+            sb.DrawString(RM.font, "Find, photograph and name all bird species!", new Vector2(64, 464), Color.Green);
+            sb.DrawString(RM.font, "Better photos have a higher value!", new Vector2(64, 490), Color.Green);
             sb.End();
         }
     }

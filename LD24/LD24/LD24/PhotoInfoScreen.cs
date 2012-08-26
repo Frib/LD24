@@ -28,7 +28,7 @@ namespace LD24
                     g.Showscreen(photoAlbum);
                 }
 
-                if (string.IsNullOrEmpty(name) && RM.IsPressed(InputAction.Fire) && new Rectangle(96, 324, 276, 24).Intersects(new Rectangle((int)IM.MousePos.X, (int)IM.MousePos.Y, 1, 1)))
+                if (photograph.Bird != null && string.IsNullOrEmpty(name) && RM.IsPressed(InputAction.Fire) && new Rectangle(96, 324, 276, 24).Intersects(new Rectangle((int)IM.MousePos.X, (int)IM.MousePos.Y, 1, 1)))
                 {
                     enteringName = true;
                 }

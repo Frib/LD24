@@ -117,6 +117,7 @@ namespace LD24
 
         internal static string GetName(Bird b)
         {
+            if (b == null) { return ""; }
             foreach (var old in birds)
             {
                 if (old.cHead == b.cHead && old.cTail == b.cTail && old.cTorso == b.cTorso && old.cWing == b.cWing && old.BeakType == b.BeakType)
@@ -126,7 +127,7 @@ namespace LD24
         }
 
         internal static void NameBird(Bird b, string name)
-        {
+        {            
             foreach (var old in birds)
             {
                 if (old.cHead == b.cHead && old.cTail == b.cTail && old.cTorso == b.cTorso && old.cWing == b.cWing && old.BeakType == b.BeakType)

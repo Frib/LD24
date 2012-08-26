@@ -68,6 +68,7 @@ namespace LD24
             RM.AddTexture("flowerleaves", Content.Load<Texture2D>("flowerleaves"));
             RM.AddTexture("sand", Content.Load<Texture2D>("sand"));
             RM.AddTexture("snow", Content.Load<Texture2D>("snow"));
+            RM.AddTexture("wish", Content.Load<Texture2D>("wishyouwerehere"));
 
             RM.AddSound("snap", Content.Load<SoundEffect>("snap"));
             RM.Volume = 1;
