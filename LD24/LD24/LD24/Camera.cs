@@ -101,7 +101,7 @@ namespace LD24
 
         public Matrix ZoomProjection
         {
-             get { return Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(cameraZoom/2.5f), (float)G.g.Window.ClientBounds.Width / (float)G.g.Window.ClientBounds.Height, 0.2f, 10000f); }
+             get { return Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(cameraZoom/2f), (float)G.g.Window.ClientBounds.Width / (float)G.g.Window.ClientBounds.Height, 0.2f, 10000f); }
         }
     }
 }

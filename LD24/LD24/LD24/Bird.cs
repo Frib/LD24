@@ -433,6 +433,8 @@ namespace LD24
             else
                 return LD24.Heading.Front;
         }
+
+        public int BeakType { get; set; }
     }
 
     public enum Animations

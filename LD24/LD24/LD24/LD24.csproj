@@ -120,6 +120,7 @@
     <Compile Include="PhotoAlbum.cs" />
     <Compile Include="PhotoDetailScreen.cs" />
     <Compile Include="Photograph.cs" />
+    <Compile Include="PhotoInfoScreen.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

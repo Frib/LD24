@@ -12,6 +12,7 @@ namespace LD24
         private Camera camera;
         private Island island;
         private int timer;
+        private int HiScore;
         
         public GameScreen(G g)
         {
@@ -56,6 +57,7 @@ namespace LD24
             island.Draw();
 
             spriteBatch.Begin();
+            spriteBatch.DrawString(g.font, HiScore.ToString(), new Vector2(16, 16), Color.Yellow);
             if (RM.IsDown(InputAction.AltFire))
             {
                 if (RM.IsPressed(InputAction.Fire) && CanTakePhoto)
@@ -80,6 +82,7 @@ namespace LD24
         internal override void AddPhotoData(Photograph pg)
         {
             CanTakePhoto = false;
+            RM.PlaySound("snap");
             timer = 60;
 
             BoundingFrustum bf = new BoundingFrustum(camera.View * camera.ZoomProjection);
@@ -96,6 +99,10 @@ namespace LD24
                 pg.Zoom = camera.cameraZoom;
             }
 
+            if (pg.CalculateScore() > HiScore)
+            {
+                HiScore = pg.CalculateScore();
+            }
             Console.Write(pg.ToString());
 
         }

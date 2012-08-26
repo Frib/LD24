@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.IO;
 
 namespace LD24
 {
@@ -99,5 +100,29 @@ namespace LD24
         public Heading Heading { get; set; }
 
         public int Zoom { get; set; }
+        public bool Saved { get; set; }
+
+        internal void Save()
+        {
+            try
+            {
+                var now = DateTime.Now;
+                string date = now.Month + "-" + now.Day + "_" + now.Hour + "-" + now.Minute + "-" + now.Second + "-" + G.r.Next(10000);
+                if (!Directory.Exists("Photographs"))
+                {
+                    Directory.CreateDirectory("Photographs");
+                }
+                using (FileStream fs = new FileStream(@"Photographs\shot_" + date + ".png", FileMode.CreateNew))
+                {
+                    Photo.SaveAsPng(fs, Photo.Width, Photo.Height);
+                }
+
+                Saved = true;
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

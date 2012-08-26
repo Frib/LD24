@@ -57,6 +57,7 @@ namespace LD24
             int beak = G.r.Next(5);
 
             Bird b = new Bird(i, pos);
+            b.BeakType = beak;
             b.SetTexturesSide(sHead, sTorso, sTail, sLeg, sBeaks[beak], sWing);
             b.SetTexturesFront(fHead, fTorso, fLeg, fBeaks[beak], fWing);
             b.SetTexturesBack(bHead, bTorso, bLeg, bWing, bTail);
@@ -69,7 +70,7 @@ namespace LD24
         private Color GenColor(Color color)
         {
             var r = G.r;
-            if (r.Next(2) == 1) return color;
+            if (r.Next(3) == 1) return color;
             int i = r.Next(30);
             switch (i)
             {
@@ -77,8 +78,8 @@ namespace LD24
                 case 1:
                 case 2:
                 case 3:
-                case 4: return Color.White;
-                case 5: 
+                case 4:
+                case 5: return Color.White;
                 case 6: return Color.LightBlue;
                 case 7:
                 case 8: return Color.Black;
