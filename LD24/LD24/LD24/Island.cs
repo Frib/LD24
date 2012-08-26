@@ -29,6 +29,8 @@ namespace LD24
         public float waterheight;
         internal Player player;
         private Sun sun;
+        private Clouds clouds;
+        private List<Entity> entitiesToAdd = new List<Entity>();
 
         public Island()
         {
@@ -74,6 +76,7 @@ namespace LD24
             CreateEnvironment();
 
             sun = new Sun(this, new Vector2((512 * scaleHorizontal) / 2, (512 * scaleHorizontal) / 2));
+            clouds = new Clouds(new Vector2((512 * scaleHorizontal) / 2, (512 * scaleHorizontal) / 2));
         }
 
         private void CreateEnvironment()
@@ -225,6 +228,7 @@ namespace LD24
             G.g.GraphicsDevice.BlendState = BlendState.AlphaBlend;
             G.g.e.CurrentTechnique.Passes[0].Apply();
             sun.Draw();
+            clouds.Draw();
 
             G.g.e.LightingEnabled = true;
             G.g.e.DirectionalLight0.Enabled = true;
@@ -308,6 +312,7 @@ namespace LD24
         internal void Update()
         {
             sun.Update();
+            clouds.Update();
             foreach (var e in entities)
             {
                 e.Update();
@@ -326,6 +331,15 @@ namespace LD24
                     }
                 }
             }
+
+            entities = entities.Where(x => !x.removeMe).ToList();
+            entities.AddRange(entitiesToAdd);
+            entitiesToAdd.Clear();
+        }
+
+        public void AddEntity(Entity e)
+        {
+            entitiesToAdd.Add(e);
         }
     }
 }

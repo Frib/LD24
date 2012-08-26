@@ -56,7 +56,12 @@ namespace LD24
             RM.AddTexture("player", Content.Load<Texture2D>("player"));
             RM.AddTexture("cameraoverlay", Content.Load<Texture2D>("cameraoverlay"));
             RM.AddTexture("sun", Content.Load<Texture2D>("sun"));
-
+            RM.AddTexture("cloud1", Content.Load<Texture2D>("cloud1"));
+            RM.AddTexture("cloud2", Content.Load<Texture2D>("cloud2"));
+            RM.AddTexture("cloud3", Content.Load<Texture2D>("cloud3"));
+            RM.AddTexture("splash1", Content.Load<Texture2D>("splash1"));
+            RM.AddTexture("splash2", Content.Load<Texture2D>("splash2"));
+            RM.AddTexture("splash3", Content.Load<Texture2D>("splash3"));
             bf = new BirdFactory();
             bf.LoadContent(Content);
         }

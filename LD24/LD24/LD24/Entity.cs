@@ -9,6 +9,8 @@ namespace LD24
 {
     class Entity
     {
+        public bool removeMe = false;
+
         public Matrix Rotation { get { return rotation; } }
         protected Matrix rotation = Matrix.Identity;
 

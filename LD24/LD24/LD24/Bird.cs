@@ -244,10 +244,12 @@ namespace LD24
             if (!flying)
                 position.Y = island.CheckHeightCollision(position);
 
-            if (position.Y < 8.5f)
+            if (position.Y < 8.5f && !flying)
             {
                 animation = Animations.flying;
                 flying = true;
+
+                island.AddEntity(new SplashEffect(island, position));
             }
         }
 
