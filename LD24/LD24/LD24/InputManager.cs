@@ -116,6 +116,11 @@ namespace LD24
                     mouseDelta.Y = -mouseDelta.Y;
 
                 ValidateMousePosition();
+
+                if ((IM.IsKeyDown(Keys.LeftAlt) || IM.IsKeyDown(Keys.RightAlt)) && IM.IsKeyPressed(Keys.Enter))
+                {
+                    G.g.graphics.ToggleFullScreen();
+                }
             }
         }
 
