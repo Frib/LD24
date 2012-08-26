@@ -129,6 +129,7 @@
     <Compile Include="Screen.cs" />
     <Compile Include="SplashEffect.cs" />
     <Compile Include="Sun.cs" />
+    <Compile Include="TerrainBuffer.cs" />
     <Compile Include="Tree.cs" />
   </ItemGroup>
   <ItemGroup>

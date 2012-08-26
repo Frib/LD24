@@ -20,6 +20,10 @@ namespace LD24
 
         public static int birdCount = 200;
 
+        int levelB = 18;
+        int levelC = 30;
+        int levelD = 240;
+
 
         QuadTree<Tree> treeCollision;
         List<Entity> plantsandshit = new List<Entity>();
@@ -30,7 +34,8 @@ namespace LD24
 
 
 
-        private List<VertexBuffer> buffers = new List<VertexBuffer>();
+        private List<TerrainBuffer> buffers = new List<TerrainBuffer>();
+        private List<Texture2D> bufferTex = new List<Texture2D>();
 
         private VertexPositionNormalTexture[] pointList;
         private float[] heights;
@@ -65,25 +70,44 @@ namespace LD24
             WritePointList();
             SmoothTerrain(9);
 
-            int previous = 0;
-            int herp = 60000;
-            for (int i = 0; i < pointList.Length; i += herp)
+            
+            buffers.Add(new TerrainBuffer());
+            buffers.Add(new TerrainBuffer());
+            buffers.Add(new TerrainBuffer());
+            buffers.Add(new TerrainBuffer());
+
+            bufferTex.Add(RM.GetTexture("sand"));
+            bufferTex.Add(RM.GetTexture("grass"));
+            bufferTex.Add(RM.GetTexture("grass"));
+            bufferTex.Add(RM.GetTexture("snow"));
+            for (int i = 0; i < pointList.Length; i += 3)
             {
-                if (i == 0)
+                var ptA = pointList[i];
+                var ptB = pointList[i + 1];
+                var ptC = pointList[i + 2];
+
+                var y = ptA.Position.Y;
+                var y2 = ptB.Position.Y;
+                var y3 = ptC.Position.Y;
+
+                int level = y > levelD ? 3 : y > levelC ? 2 : y > levelB ? 1 : 0;
+                int level2 = y2 > levelD ? 3 : y2 > levelC ? 2 : y2 > levelB ? 1 : 0;
+                int level3 = y3 > levelD ? 3 : y3 > levelC ? 2 : y3 > levelB ? 1 : 0;
+
+                var bufferToAdd = buffers[level];
+
+                if (level != level2)
                 {
-                    continue;
+                    //well shit
                 }
 
-                var vb = new VertexBuffer(G.g.GraphicsDevice, typeof(VertexPositionNormalTexture), herp, BufferUsage.WriteOnly);
-                vb.SetData<VertexPositionNormalTexture>(pointList.Skip(previous).Take(herp).ToArray());
-                buffers.Add(vb);
-                previous = i;
+                bufferToAdd.AddVertices(new[] { ptA, ptB, ptC });
             }
 
-            var vbe = new VertexBuffer(G.g.GraphicsDevice, typeof(VertexPositionNormalTexture), pointList.Length - previous, BufferUsage.WriteOnly);
-            vbe.SetData<VertexPositionNormalTexture>(pointList.Skip(previous).Take(pointList.Length - previous).ToArray());
-            buffers.Add(vbe);
-
+            foreach (var b in buffers)
+            {
+                b.AddLast();
+            }
             CreateWater();
             CreateEnvironment();
 
@@ -266,11 +290,13 @@ namespace LD24
             G.g.GraphicsDevice.BlendState = BlendState.NonPremultiplied;
             G.g.e.Texture = RM.GetTexture("grass");
             G.g.e.World = Matrix.Identity;
-            G.g.e.CurrentTechnique.Passes[0].Apply();
-            foreach (var vb in buffers)
+            
+            for (int i = 0; i < buffers.Count; i++)
             {
-                G.g.GraphicsDevice.SetVertexBuffer(vb);
-                G.g.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, vb.VertexCount / 3);
+                G.g.e.Texture = bufferTex[i];
+                G.g.e.CurrentTechnique.Passes[0].Apply();
+                buffers[i].Draw();
+                
             }
 
             G.g.e.Texture = RM.GetTexture("water");

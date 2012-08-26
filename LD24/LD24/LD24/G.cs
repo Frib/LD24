@@ -66,6 +66,7 @@ namespace LD24
             RM.AddTexture("flowercore", Content.Load<Texture2D>( "flowercore"));
             RM.AddTexture("flowerleaves", Content.Load<Texture2D>("flowerleaves"));
             RM.AddTexture("sand", Content.Load<Texture2D>("sand"));
+            RM.AddTexture("snow", Content.Load<Texture2D>("snow"));
             bf = new BirdFactory();
             bf.LoadContent(Content);
         }
@@ -105,7 +106,6 @@ namespace LD24
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            Console.WriteLine(gameTime.IsRunningSlowly);
             currentScreen.Draw();
 
             base.Draw(gameTime);
