@@ -31,8 +31,8 @@ namespace LD24
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             Window.Title = "Species Hunt";
-            graphics.PreferredBackBufferHeight = 600;
-            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
         }
 
         protected override void Initialize()
@@ -93,17 +93,16 @@ namespace LD24
             currentScreen.Update();
             if (currentScreen.CanTakePhoto && RM.IsDown(InputAction.AltFire) && RM.IsPressed(InputAction.Fire))
             {
-                int scale = 2;
-                RenderTarget2D screenshot = new RenderTarget2D(GraphicsDevice, 800 * scale, 600 * scale, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+                RenderTarget2D screenshot = new RenderTarget2D(GraphicsDevice, 3840, 2160, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
                 GraphicsDevice.Clear(Color.Black);
                 GraphicsDevice.SetRenderTarget(screenshot);
                 GraphicsDevice.Clear(Color.CornflowerBlue);
                 currentScreen.Draw();
                 GraphicsDevice.SetRenderTarget(null);
 
-                Color[] data = new Color[320 * 240 * scale * scale];
-                screenshot.GetData<Color>(0, new Rectangle(240 * scale, 180 * scale, 320 * scale, 240 * scale), data, 0, data.Length);
-                Texture2D shot = new Texture2D(GraphicsDevice, 320 * scale, 240 * scale);
+                Color[] data = new Color[1920 * 1080];
+                screenshot.GetData<Color>(0, new Rectangle(960, 540, 1920, 1080), data, 0, data.Length);
+                Texture2D shot = new Texture2D(GraphicsDevice, 1920, 1080);
                 shot.SetData<Color>(data);
                 Photograph pg = new Photograph(shot);
                 photos.Add(pg);

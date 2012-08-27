@@ -30,7 +30,7 @@ namespace LD24
 
             if (RM.IsPressed(InputAction.Fire))
             {
-                if (IM.MousePos.Y > 160 && IM.MousePos.Y < 400)
+                if (IM.MousePos.Y > 160 && IM.MousePos.Y < 360)
                 {
                     int xPos = ((int)IM.MousePos.X - offset) - 64;
                     if (xPos > 0)
@@ -78,7 +78,7 @@ namespace LD24
             spriteBatch.Begin();
             for (int i = 0; i < g.photos.Count; i++)
             {
-                spriteBatch.Draw(g.photos[i].Photo, new Rectangle(64 + (i * 330) + offset, 160, 320, 240), Color.White);
+                spriteBatch.Draw(g.photos[i].Photo, new Rectangle(64 + (i * 330) + offset, 160, 320, 200), Color.White);
                 spriteBatch.DrawString(g.font, g.photos[i].CalculateScore().ToString(), new Vector2(64 + (i * 330) + offset, 354), Color.Yellow);
                 spriteBatch.Draw(RM.GetTexture("grass"), new Rectangle(170 + (i * 330) + offset, 420, 100, 24), Color.Black);
                 spriteBatch.DrawString(g.font, "Bird info", new Vector2(170 + (i * 330) + offset, 420), Color.Yellow);
